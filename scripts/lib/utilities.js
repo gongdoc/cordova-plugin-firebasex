@@ -26,7 +26,7 @@ Utilities.setContext = function(context){
 };
 
 Utilities.parsePackageJson = function(){
-    return JSON.parse(fs.readFileSync(path.resolve('plugins/cordova-plugin-firebasex/package.json')));
+    return JSON.parse(fs.readFileSync(path.resolve('./package.json')));
 };
 
 Utilities.parseConfigXml = function(){

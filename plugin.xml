@@ -64,7 +64,6 @@
 			<meta-data android:name="firebase_crashlytics_collection_enabled" android:value="$FIREBASE_CRASHLYTICS_COLLECTION_ENABLED" />
 			<meta-data android:name="firebase_messaging_auto_init_enabled" android:value="$FIREBASE_FCM_AUTOINIT_ENABLED" />
 		</config-file>
-		<resource-file src="src/android/google-services.json" target="."/>
 		<resource-file src="src/android/cordova-plugin-firebase-strings.xml" target="res/values/cordova-plugin-firebase-strings.xml" />
 		<resource-file src="src/android/themes.xml" target="res/values/themes.xml" />
 		<resource-file src="src/android/fragment_overlay.xml" target="res/layout/fragment_overlay.xml" />

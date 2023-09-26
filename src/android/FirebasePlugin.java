@@ -636,7 +636,7 @@ public class FirebasePlugin extends CordovaPlugin {
                 data.putString("messageType", "notification");
                 data.putString("tap", "background");
                 Log.d(TAG, "Notification message on new intent: " + data.toString());
-                FirebasePlugin.sendNotification(data, applicationContext);
+                FirebasePlugin.sendMessage(data, applicationContext);
             }
         }catch (Exception e){
             handleExceptionWithoutContext(e);

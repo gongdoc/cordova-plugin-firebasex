@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/background"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
+    android:layout_centerVertical="true"
+    android:background="@android:color/black"
+    android:orientation="vertical">
+
+    <org.apache.cordova.firebase.RoundedRelativeLayout
+        android:id="@+id/dialog"
+        android:theme="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="0dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/dialog_bg"
+        android:clipToPadding="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#444444">
+
+            <TextView
+                android:id="@+id/textTitle"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="8dp"
+                android:background="#444444"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@android:string/untitled"
+                android:textColor="@android:color/white"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/noto_sans"
+                android:lineSpacingExtra="0dp"
+                android:includeFontPadding="false" />
+
+            <ImageButton
+                android:id="@+id/buttonCancel"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_alignParentEnd="true"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:scaleType="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="14dp"
+                android:background="@drawable/ic_clear_white_24dp" />
+        </RelativeLayout>
+
+        <WebView
+            android:id="@+id/textContent"
+            android:clickable="true"
+            android:layout_below="@id/header"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scrollbars="vertical"
+            android:background="@android:color/white"
+            android:fontFamily="@font/noto_sans"
+            android:text="@android:string/untitled"
+            android:includeFontPadding="false" />
+
+        <Button
+            android:id="@+id/buttonOk"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:padding="0dp"
+            android:background="#2196f3"
+            android:text="지원하기"
+            android:textColor="@android:color/white"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/noto_sans"
+            android:includeFontPadding="false" />
+    </org.apache.cordova.firebase.RoundedRelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/textBgContainer"
+        android:layout_below="@+id/dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textBg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="30dp"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal|bottom"
+            android:text="@android:string/untitled"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:fontFamily="@font/noto_sans"
+            android:lineSpacingExtra="0dp"
+            android:includeFontPadding="false" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

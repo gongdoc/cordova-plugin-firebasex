@@ -18,6 +18,9 @@
 	<preference name="FIREBASE_FCM_AUTOINIT_ENABLED" default="true" />
 
 	<platform name="android">
+		<hook type="after_plugin_install" src="scripts/android/after_plugin_install.js" />
+		<hook type="before_plugin_uninstall" src="scripts/android/before_plugin_uninstall.js" />
+
 		<preference name="ANDROID_ICON_ACCENT" default="#FF00FFFF" />
 		<preference name="ANDROID_FIREBASE_PERFORMANCE_MONITORING" default="false" />
 
@@ -34,14 +37,24 @@
 			<uses-permission android:name="android.permission.INTERNET" />
 			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 			<uses-permission android:name="android.permission.WAKE_LOCK" />
+			<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+        	<uses-permission android:name="android.permission.VIBRATE" />
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="application">
+			<activity android:name="org.apache.cordova.firebase.OverlayActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:noHistory="true" />
+			<activity android:name="org.apache.cordova.firebase.ExitActivity" />
 			<service android:enabled="true" android:exported="false" android:name="com.google.android.gms.measurement.AppMeasurementService" />
 			<service android:exported="false" android:name="org.apache.cordova.firebase.FirebasePluginMessagingService">
 				<intent-filter>
 					<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 				</intent-filter>
 			</service>
+			<service android:name="org.apache.cordova.firebase.FirebasePluginInstanceIDService">
+				<intent-filter>
+					<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+				</intent-filter>
+			</service>
+			<service android:name="org.apache.cordova.firebase.OverlayService" />
 			<receiver android:name="org.apache.cordova.firebase.OnNotificationOpenReceiver"/>
 			<activity android:name="org.apache.cordova.firebase.OnNotificationReceiverActivity" android:noHistory="true" android:excludeFromRecents="true" android:taskAffinity="" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:exported="true" />
 			<meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/accent" />
@@ -51,17 +64,40 @@
 			<meta-data android:name="firebase_crashlytics_collection_enabled" android:value="$FIREBASE_CRASHLYTICS_COLLECTION_ENABLED" />
 			<meta-data android:name="firebase_messaging_auto_init_enabled" android:value="$FIREBASE_FCM_AUTOINIT_ENABLED" />
 		</config-file>
+		<resource-file src="src/android/google-services.json" target="."/>
 		<resource-file src="src/android/cordova-plugin-firebase-strings.xml" target="res/values/cordova-plugin-firebase-strings.xml" />
+		<resource-file src="src/android/themes.xml" target="res/values/themes.xml" />
+		<resource-file src="src/android/fragment_overlay.xml" target="res/layout/fragment_overlay.xml" />
+		<resource-file src="src/android/notification.xml" target="res/layout/notification.xml" />
+		<resource-file src="src/android/notification_expanded.xml" target="res/layout/notification_expanded.xml" />
+		<resource-file src="src/android/dialog_bg.xml" target="res/drawable/dialog_bg.xml" />
+		<resource-file src="src/android/ic_notification.xml" target="res/drawable/ic_notification.xml" />
+		<resource-file src="src/android/ic_clear_white_24dp.xml" target="res/drawable/ic_clear_white_24dp.xml" />
+		<resource-file src="src/android/ic_notifications_white_24dp.xml" target="res/drawable/ic_notifications_white_24dp.xml" />
+		<resource-file src="src/android/res/drawable-hdpi/ic_bullet_triangle.png" target="res/drawable-hdpi/ic_bullet_triangle.png" />
+		<resource-file src="src/android/res/drawable-mdpi/ic_bullet_triangle.png" target="res/drawable-mdpi/ic_bullet_triangle.png" />
+		<resource-file src="src/android/res/drawable-xhdpi/ic_bullet_triangle.png" target="res/drawable-xhdpi/ic_bullet_triangle.png" />
+		<resource-file src="src/android/res/drawable-xxhdpi/ic_bullet_triangle.png" target="res/drawable-xxhdpi/ic_bullet_triangle.png" />
+		<resource-file src="src/android/res/drawable-xxxhdpi/ic_bullet_triangle.png" target="res/drawable-xxxhdpi/ic_bullet_triangle.png" />
+		<resource-file src="src/android/noto_sans.xml" target="res/font/noto_sans.xml" />
+		<resource-file src="src/android/noto_sans_kr_bold.otf" target="res/font/noto_sans_kr_bold.otf" />
+		<resource-file src="src/android/noto_sans_kr_regular.otf" target="res/font/noto_sans_kr_regular.otf" />
+		<resource-file src="src/android/res/raw/gongdoc.mp3" target="res/raw/gongdoc.mp3" />
 		<source-file src="src/android/FirebasePlugin.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/OnNotificationOpenReceiver.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/OnNotificationReceiverActivity.java" target-dir="src/org/apache/cordova/firebase" />
+		<source-file src="src/android/FirebasePluginInstanceIDService.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/FirebasePluginMessagingService.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/FirebasePluginMessageReceiver.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/FirebasePluginMessageReceiverManager.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/JavaScriptException.java" target-dir="src/org/apache/cordova/firebase"/>
-
-		<framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-
+		<source-file src="src/android/OverlayService.java" target-dir="src/org/apache/cordova/firebase" />
+		<source-file src="src/android/OverlayActivity.java" target-dir="src/org/apache/cordova/firebase" />
+		<source-file src="src/android/ExitActivity.java" target-dir="src/org/apache/cordova/firebase" />
+		<source-file src="src/android/PushWakeLock.java" target-dir="src/org/apache/cordova/firebase" />
+		<source-file src="src/android/RoundedRelativeLayout.java" target-dir="src/org/apache/cordova/firebase" />
+		<source-file src="src/android/colors.xml" target-dir="res/values" />
+		
 		<!-- Default versions for Gradle dependencies -->
 		<preference name="ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION" default="18.0.2" />
 		<preference name="ANDROID_PLAY_SERVICES_AUTH_VERSION" default="20.5.0" />
@@ -81,6 +117,12 @@
 		<preference name="ANDROID_FIREBASE_PERF_GRADLE_PLUGIN_VERSION" default="1.4.2" />
 		<preference name="ANDROID_GRPC_OKHTTP" default="1.46.0" />
 
+		<framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+		<framework src="com.google.android.gms:play-services-tagmanager:+" />
+		<framework src="com.google.firebase:firebase-core:+" />
+		<framework src="com.google.firebase:firebase-messaging:+" />
+		<framework src="com.google.firebase:firebase-config:+" />
+		<framework src="com.google.firebase:firebase-perf:+" />
 		<framework src="com.google.android.gms:play-services-tagmanager:$ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION" />
 		<framework src="com.google.android.gms:play-services-auth:$ANDROID_PLAY_SERVICES_AUTH_VERSION" />
 		<framework src="com.google.firebase:firebase-analytics:$ANDROID_FIREBASE_ANALYTICS_VERSION" />

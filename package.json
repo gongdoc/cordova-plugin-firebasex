@@ -15,13 +15,15 @@
     "id": "cordova-plugin-firebase",
     "platforms": [
       "android",
-      "ios"
+      "ios",
+      "browser"
     ]
   },
   "keywords": [
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios",
+    "cordova-browser",
     "firebase",
     "push",
     "notifications",

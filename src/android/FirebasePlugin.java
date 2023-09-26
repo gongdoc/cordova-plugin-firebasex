@@ -6,13 +6,13 @@ import android.app.NotificationChannel;
 import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.media.AudioAttributes;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -437,10 +437,19 @@ public class FirebasePlugin extends CordovaPlugin {
                 this.getInstallationId(args, callbackContext);
             } else if (action.equals("getInstallationToken")) {
                 this.getInstallationToken(args, callbackContext);
-            } else{
+            } else if (action.equals("loadNotificationSettings")) {
+                this.loadNotificationSettings(callbackContext);
+                return true;
+            } else if (action.equals("loadOverlaySettings")) {
+                this.loadOverlaySettings(callbackContext);
+                return true;
+            } else if (action.equals("hasOverlayPermission")) {
+                this.hasOverlayPermission(callbackContext);
+                return true;
+            } else {
                 callbackContext.error("Invalid action: " + action);
                 return false;
-            }
+            } 
         }catch(Exception e){
             handleExceptionWithContext(e, callbackContext);
             return false;
@@ -627,7 +636,7 @@ public class FirebasePlugin extends CordovaPlugin {
                 data.putString("messageType", "notification");
                 data.putString("tap", "background");
                 Log.d(TAG, "Notification message on new intent: " + data.toString());
-                FirebasePlugin.sendMessage(data, applicationContext);
+                FirebasePlugin.sendNotification(data, applicationContext);
             }
         }catch (Exception e){
             handleExceptionWithoutContext(e);
@@ -2624,6 +2633,8 @@ public class FirebasePlugin extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
+                    // ???
+                    // Context context = cordova.getActivity();
                     NotificationManager nm = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.cancelAll();
                     callbackContext.success();
@@ -3938,5 +3949,83 @@ public class FirebasePlugin extends CordovaPlugin {
             callbackContext.error("No user is currently signed");
         }
         return signedIn;
+    }
+
+    private void loadNotificationSettings(final CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    Activity context = cordova.getActivity();
+                    Intent intent = new Intent();
+                    if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.N_MR1) {
+                        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                        intent.putExtra("android.provider.extra.APP_PACKAGE", context.getPackageName());
+                    } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                        intent.putExtra("app_package", context.getPackageName());
+                        intent.putExtra("app_uid", context.getApplicationInfo().uid);
+                    } else {
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.setData(Uri.parse("package:" + context.getPackageName()));
+                    }
+
+                    context.startActivity(intent);
+                    
+                    callbackContext.success();
+                } catch (Exception e) {
+                    Crashlytics.log(e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void loadOverlaySettings(final CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    Activity context = cordova.getActivity();
+                    Intent intent = new Intent();
+                    
+                    if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.M) {
+                        if (!Settings.canDrawOverlays(context)) {
+                            intent.setAction("android.settings.action.MANAGE_OVERLAY_PERMISSION");
+                            intent.setData(Uri.parse("package:" + context.getPackageName()));
+                        }
+                    } else {
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.setData(Uri.parse("package:" + context.getPackageName()));
+                    }
+
+                    context.startActivity(intent);
+                    
+                    callbackContext.success();
+                } catch (Exception e) {
+                    Crashlytics.log(e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void hasOverlayPermission(final CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    boolean areOverlayEnabled = true;
+                    if (android.os.Build.VERSION.SDK_INT >= 29){
+                        Context context = cordova.getActivity();
+                        areOverlayEnabled = Settings.canDrawOverlays(context);
+                    }
+                    
+                    JSONObject object = new JSONObject();
+                    object.put("isEnabled", areOverlayEnabled);
+                    callbackContext.success(object);
+                } catch (Exception e) {
+                    Crashlytics.logException(e);
+                    callbackContext.error(e.getMessage());
+                }
+            }
+        });
     }
 }

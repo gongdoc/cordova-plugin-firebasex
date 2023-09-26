@@ -33,6 +33,7 @@ import android.graphics.RectF;
 import android.graphics.Paint;
 import android.graphics.Canvas;
 import android.widget.RemoteViews;
+import org.apache.cordova.CallbackContext;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -144,7 +145,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             String imageType = null;
             boolean foregroundNotification = false;
             String flagWakeUp = "";
-
+            String flagPush = "";
+            String title = "";
+            String text = "";
+            String id = "";
+            String wakeUp = "";
+            String sound = "";
+            String lights = "";
             Map<String, String> data = remoteMessage.getData();
 
             if (remoteMessage.getNotification() != null) {

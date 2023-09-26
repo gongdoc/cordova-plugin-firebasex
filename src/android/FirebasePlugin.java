@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.media.AudioAttributes;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -23,6 +25,7 @@ import androidx.core.app.NotificationManagerCompat;
 import android.util.Base64;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.EmailAuthCredential;

@@ -4004,7 +4004,7 @@ public class FirebasePlugin extends CordovaPlugin {
                     
                     callbackContext.success();
                 } catch (Exception e) {
-                    Crashlytics.logException(e.getMessage());
+                    logExceptionToCrashlytics(e);
                 }
             }
         });

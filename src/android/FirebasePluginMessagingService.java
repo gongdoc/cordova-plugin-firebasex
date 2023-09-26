@@ -34,6 +34,7 @@ import android.graphics.Paint;
 import android.graphics.Canvas;
 import android.widget.RemoteViews;
 import org.apache.cordova.CallbackContext;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -588,24 +589,4 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             b.putString(k, v);
         }
     }
-
-    private void onTokenRefresh(final CallbackContext callbackContext) {
-        FirebasePlugin.tokenRefreshCallbackContext = callbackContext;
-
-        cordova.getThreadPool().execute(new Runnable() {
-            public void run() {
-                try {
-                    String currentToken = FirebaseInstanceId.getInstance().getToken();
-                    if (currentToken != null) {
-                        FirebasePlugin.sendToken(currentToken);
-                    }
-                } catch (Exception e) {
-                    logExceptionToCrashlytics(e);
-                    callbackContext.error(e.getMessage());
-                }
-            }
-        });
-    }
-
-    
 }

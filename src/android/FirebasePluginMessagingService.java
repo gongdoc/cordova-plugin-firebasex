@@ -59,6 +59,20 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
     static final String imageTypeBigPicture = "big_picture";
 
     /**
+     * Get a string from resources without importing the .R package
+     *
+     * @param name Resource Name
+     * @return Resource
+     */
+    private String getStringResource(String name) {
+        return this.getString(
+                this.getResources().getIdentifier(
+                        name, "string", this.getPackageName()
+                )
+        );
+    }
+
+    /**
      * Called if InstanceID token is updated. This may occur if the security of
      * the previous token had been compromised. Note that this is called when the InstanceID token
      * is initially generated so this is where you would retrieve the token.
@@ -529,7 +543,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bundle.putBoolean("tap", false);
             bundle.putString("title", title);
             bundle.putString("body", messageBody);
-            FirebasePlugin.sendNotification(bundle, this.getApplicationContext());
+            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
         }
     }
 
@@ -575,44 +589,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
 
-    @Override
-    public void onPause(boolean multitasking) {
-        FirebasePlugin.inBackground = true;
-    }
-
-    @Override
-    public void onResume(boolean multitasking) {
-        FirebasePlugin.inBackground = false;
-    }
-
-    @Override
-    public void onReset() {
-        FirebasePlugin.notificationCallbackContext = null;
-        FirebasePlugin.tokenRefreshCallbackContext = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // avoid the abnormal exit of the app
-        System.exit(0);
-
-        if (this.appView != null) {
-            appView.handleDestroy();
-        }
-    }
-
-    private void onNotificationOpen(final CallbackContext callbackContext) {
-        FirebasePlugin.notificationCallbackContext = callbackContext;
-        if (FirebasePlugin.notificationStack != null) {
-            for (Bundle bundle : FirebasePlugin.notificationStack) {
-                FirebasePlugin.sendMessage(bundle, this.cordova.getActivity().getApplicationContext());
-            }
-            FirebasePlugin.notificationStack.clear();
-        }
-    }
-
     private void onTokenRefresh(final CallbackContext callbackContext) {
         FirebasePlugin.tokenRefreshCallbackContext = callbackContext;
 
@@ -624,7 +600,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                         FirebasePlugin.sendToken(currentToken);
                     }
                 } catch (Exception e) {
-                    Crashlytics.logException(e);
+                    logExceptionToCrashlytics(e);
                     callbackContext.error(e.getMessage());
                 }
             }

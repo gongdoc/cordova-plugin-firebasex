@@ -25,7 +25,6 @@ import androidx.core.app.NotificationManagerCompat;
 import android.util.Base64;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.EmailAuthCredential;
@@ -3977,7 +3976,7 @@ public class FirebasePlugin extends CordovaPlugin {
                     
                     callbackContext.success();
                 } catch (Exception e) {
-                    Crashlytics.log(e.getMessage());
+                    logExceptionToCrashlytics(e);
                 }
             }
         });
@@ -4005,7 +4004,7 @@ public class FirebasePlugin extends CordovaPlugin {
                     
                     callbackContext.success();
                 } catch (Exception e) {
-                    Crashlytics.log(e.getMessage());
+                    Crashlytics.logException(e.getMessage());
                 }
             }
         });
@@ -4025,7 +4024,7 @@ public class FirebasePlugin extends CordovaPlugin {
                     object.put("isEnabled", areOverlayEnabled);
                     callbackContext.success(object);
                 } catch (Exception e) {
-                    Crashlytics.logException(e);
+                    logExceptionToCrashlytics(e);
                     callbackContext.error(e.getMessage());
                 }
             }

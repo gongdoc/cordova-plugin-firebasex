@@ -18,9 +18,6 @@
 	<preference name="FIREBASE_FCM_AUTOINIT_ENABLED" default="true" />
 
 	<platform name="android">
-		<hook type="after_plugin_install" src="scripts/android/after_plugin_install.js" />
-		<hook type="before_plugin_uninstall" src="scripts/android/before_plugin_uninstall.js" />
-
 		<preference name="ANDROID_ICON_ACCENT" default="#FF00FFFF" />
 		<preference name="ANDROID_FIREBASE_PERFORMANCE_MONITORING" default="false" />
 

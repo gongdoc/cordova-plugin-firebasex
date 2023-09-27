@@ -253,6 +253,7 @@ public class FirebasePlugin extends CordovaPlugin {
                 this.getToken(args, callbackContext);
             } else if (action.equals("hasPermission")) {
                 this.hasPermission(callbackContext);
+                return true;
             } else if (action.equals("grantPermission")) {
                 this.grantPermission(callbackContext);
             } else if (action.equals("subscribe")) {

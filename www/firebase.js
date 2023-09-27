@@ -120,7 +120,8 @@ exports.grantCriticalPermission = function (success, error) {
 };
 
 exports.hasPermission = function (success, error) {
-    exec(ensureBooleanFn(success), error, "FirebasePlugin", "hasPermission", []);
+    // exec(ensureBooleanFn(success), error, "FirebasePlugin", "hasPermission", []);
+    exec(success, error, "FirebasePlugin", "hasPermission", []);
 };
 
 exports.hasCriticalPermission = function (success, error) {

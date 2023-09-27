@@ -679,29 +679,18 @@ public class FirebasePlugin extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
-                    Context context = cordova.getActivity();
-                    NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                    NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(cordovaActivity);
                     boolean areNotificationsEnabled = notificationManagerCompat.areNotificationsEnabled();
-                    JSONObject object = new JSONObject();
-                    object.put("isEnabled", areNotificationsEnabled);
-                    callbackContext.success(object);
+
+                    boolean hasRuntimePermission = true;
+                    if(Build.VERSION.SDK_INT >= 33){ // Android 13+
+                        hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
+                    }
+
+                    callbackContext.success(conformBooleanForPluginResult(areNotificationsEnabled && hasRuntimePermission));
                 } catch (Exception e) {
-                    logExceptionToCrashlytics(e);
-                    callbackContext.error(e.getMessage());
+                    handleExceptionWithContext(e, callbackContext);
                 }
-                // try {
-                //     NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(cordovaActivity);
-                //     boolean areNotificationsEnabled = notificationManagerCompat.areNotificationsEnabled();
-
-                //     boolean hasRuntimePermission = true;
-                //     if(Build.VERSION.SDK_INT >= 33){ // Android 13+
-                //         hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
-                //     }
-
-                //     callbackContext.success(conformBooleanForPluginResult(areNotificationsEnabled && hasRuntimePermission));
-                // } catch (Exception e) {
-                //     handleExceptionWithContext(e, callbackContext);
-                // }
             }
         });
     }

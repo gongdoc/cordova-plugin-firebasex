@@ -52,11 +52,11 @@ export interface FirebasePlugin {
         success: () => void,
         error: (err: string) => void
     ): void
-    grantPermission(
-        success: (value: boolean) => void,
-        error: (err: string) => void,
-        requestWithProvidesAppNotificationSettings?: boolean
-    ): void
+    // grantPermission(
+    //     success: (value: boolean) => void,
+    //     error: (err: string) => void,
+    //     requestWithProvidesAppNotificationSettings?: boolean
+    // ): void
     hasPermission(
         success: (value: boolean) => void,
         error: (err: string) => void

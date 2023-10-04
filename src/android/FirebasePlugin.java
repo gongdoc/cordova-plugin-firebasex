@@ -688,7 +688,9 @@ public class FirebasePlugin extends CordovaPlugin {
                         hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
                     }
 
-                    callbackContext.success(conformBooleanForPluginResult(areNotificationsEnabled && hasRuntimePermission));
+                    JSONObject object = new JSONObject();
+                    object.put("isEnabled", areNotificationsEnabled && hasRuntimePermission);
+                    callbackContext.success(object);
                 } catch (Exception e) {
                     handleExceptionWithContext(e, callbackContext);
                 }

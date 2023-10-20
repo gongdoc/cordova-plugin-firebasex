@@ -286,10 +286,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                         if (audioManager != null) {
                             int ringerMode = audioManager.getRingerMode();
                             if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                                Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
-                                if (sound != null) {
-                                    soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
-                                }
+                                //Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
+                                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc.mp3");
 
                                 final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                                 final int volumeMusic = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);

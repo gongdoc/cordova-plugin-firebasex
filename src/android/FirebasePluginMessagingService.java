@@ -432,6 +432,27 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bigContentView.setTextViewText(titleId, title);
             bigContentView.setTextViewText(contentId, messageBody);
 
+            
+
+            notificationBuilder
+                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                    .setGroup(groupId)
+                    .setGroupSummary(true)
+                    .setCustomContentView(contentView)
+                    .setCustomBigContentView(bigContentView)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_MAX);
+
+            int resID = getResources().getIdentifier("ic_notification", "drawable", getPackageName());
+            if (resID != 0) {
+                notificationBuilder.setSmallIcon(resID);
+            } else {
+                notificationBuilder.setSmallIcon(getApplicationInfo().icon);
+            }
+
             // Vibrate
             if (vibrate != null){
                 try {
@@ -447,26 +468,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
-            }
-
-            notificationBuilder
-                    .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                    .setGroup(groupId)
-                    .setGroupSummary(true)
-                    .setCustomContentView(contentView)
-                    .setCustomBigContentView(bigContentView)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
-                    .setVibrate(lVibrations)
-                    .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_MAX);
-
-            int resID = getResources().getIdentifier("ic_notification", "drawable", getPackageName());
-            if (resID != 0) {
-                notificationBuilder.setSmallIcon(resID);
-            } else {
-                notificationBuilder.setSmallIcon(getApplicationInfo().icon);
             }
 
             if (lights != null) {

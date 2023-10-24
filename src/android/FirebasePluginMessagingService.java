@@ -150,6 +150,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             String[] bodyLocArgs = null;
             String bodyHtml = null;
             String id = null;
+            String sound = null;
             String vibrate = null;
             String light = null;
             String color = null;
@@ -173,7 +174,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 id = remoteMessage.getMessageId();
                 // Notification message payload
                 // Log.i(TAG, "Received message: notification");
-                // messageType = "notification";
+                messageType = "notification";
                 // id = remoteMessage.getMessageId();
                 // RemoteMessage.Notification notification = remoteMessage.getNotification();
                 // title = notification.getTitle();
@@ -182,10 +183,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 // body = notification.getBody();
                 // bodyLocKey = notification.getBodyLocalizationKey();
                 // bodyLocArgs = notification.getBodyLocalizationArgs();
-                // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                //     channelId = notification.getChannelId();
-                // }
-                // sound = notification.getSound();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    channelId = notification.getChannelId();
+                }
+                sound = notification.getSound();
                 // color = notification.getColor();
                 // icon = notification.getIcon();
                 // if (notification.getImageUrl() != null) {
@@ -222,6 +223,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
                 if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
                 if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
+                if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
                 if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
                 if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
                 if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");
@@ -288,7 +290,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 vibrate = "500, 200, 500";
                 color = "#ff0000";
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color);
+                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId, messageType);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -323,12 +325,25 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrator, String color) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrator, String color, String sound, String channelId, String messageType) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
         }
 
+        bundle.putString("messageType", messageType);
+        this.putKVInBundle("id", id, bundle);
+        this.putKVInBundle("title", title, bundle);
+        this.putKVInBundle("messageBody", messageBody, bundle);
+        this.putKVInBundle("sound", sound, bundle);
+        this.putKVInBundle("vibrate", vibrate, bundle);
+        this.putKVInBundle("lights", lights, bundle);
+        this.putKVInBundle("color", color, bundle);
+        this.putKVInBundle("channel_id", channelId, bundle);
+        this.putKVInBundle("priority", priority, bundle);
+        this.putKVInBundle("visibility", visibility, bundle);
+        this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
+        
         if (showNotification) {
             Intent intent;
             PendingIntent pendingIntent;
@@ -346,9 +361,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             String groupId = getPackageName() + ".NOTIFICATIONS";
 
-            String channelId = this.getStringResource("default_notification_channel_id");
-            String channelName = this.getStringResource("default_notification_channel_name");
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            // Channel
+            if(channelId == null || !FirebasePlugin.channelExists(channelId)){
+                channelId = FirebasePlugin.defaultChannelId;
+            }
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                Log.d(TAG, "Channel ID: "+channelId);
+            }
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
 
@@ -394,8 +413,16 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
-                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/gongdoc.mp3");
-                notificationBuilder.setSound(soundPath);
+                if (sound == null) {
+                    Log.d(TAG, "Sound: none");
+                }else if (sound.equals("default")) {
+                    notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                    Log.d(TAG, "Sound: default");
+                }else{
+                    Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/" + sound);
+                    Log.d(TAG, "Sound: custom=" + sound+"; path="+soundPath.toString());
+                    notificationBuilder.setSound(soundPath);
+                }
 
                 // lights
                 if (lights != null) {

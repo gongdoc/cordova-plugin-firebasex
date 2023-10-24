@@ -398,7 +398,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 notificationBuilder.setSmallIcon(getApplicationInfo().icon);
             }
 
-            //if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
                 Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 notificationBuilder.setSound(soundPath);
@@ -435,7 +435,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                         Log.e(TAG, e.getMessage());
                     }
                 }
-            //}
+            }
 
             // Color
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {

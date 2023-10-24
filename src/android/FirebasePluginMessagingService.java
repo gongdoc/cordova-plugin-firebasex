@@ -368,12 +368,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 return;
             }
-
-            
-            if (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title) || (data != null && !data.isEmpty())) {
-                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
-                sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
-            }
         }catch (Exception e){
             FirebasePlugin.handleExceptionWithoutContext(e);
         }
@@ -446,8 +440,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     .setCustomBigContentView(bigContentView)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setAutoCancel(true)
-                    // .setSound(defaultSoundUri)
-                    // .setVibrate(defaultVibration)
+                    .setSound(defaultSoundUri)
+                    .setVibrate(defaultVibration)
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_MAX);
 

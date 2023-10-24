@@ -338,7 +338,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                sendMessage(id, title, text, data, showNotification, sound, lights);
+                sendMessage(id, title, text, data, showNotification, sound, lights, vibrate);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -373,7 +373,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String sound, String lights) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String sound, String lights, String vibrate) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
@@ -432,6 +432,23 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bigContentView.setTextViewText(titleId, title);
             bigContentView.setTextViewText(contentId, messageBody);
 
+            // Vibrate
+            if (vibrate != null){
+                try {
+                    String[] sVibrations = vibrate.replaceAll("\\s", "").split(",");
+                    long[] lVibrations = new long[sVibrations.length];
+                    int i=0;
+                    for(String sVibration: sVibrations){
+                        lVibrations[i] = Integer.parseInt(sVibration.trim());
+                        i++;
+                    }
+                    notificationBuilder.setVibrate(lVibrations);
+                    Log.d(TAG, "Vibrate: "+vibrate);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
             notificationBuilder
                     .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                     .setGroup(groupId)
@@ -441,7 +458,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
-                    .setVibrate(defaultVibration)
+                    .setVibrate(lVibrations)
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_MAX);
 
@@ -474,7 +491,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             Uri soundPath = defaultSoundUri;
             if (sound != null) {
-                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
+                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/gongdoc.mp3");
                 notificationBuilder.setSound(soundPath);
             } else {
                 Log.d(TAG, "Sound was null ");

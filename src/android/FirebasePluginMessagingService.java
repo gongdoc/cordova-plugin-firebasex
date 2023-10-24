@@ -173,8 +173,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 id = remoteMessage.getMessageId();
                 // Notification message payload
                 // Log.i(TAG, "Received message: notification");
-                // messageType = "notification";
-                // id = remoteMessage.getMessageId();
+                messageType = "notification";
                 // RemoteMessage.Notification notification = remoteMessage.getNotification();
                 // title = notification.getTitle();
                 // titleLocKey = notification.getTitleLocalizationKey();
@@ -287,8 +286,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 vibrate = "500, 200, 500";
-                color = "#ff0000";
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color);
+                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -323,11 +321,19 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
         }
+
+        bundle.putString("messageType", messageType);
+        this.putKVInBundle("id", id, bundle);
+        this.putKVInBundle("title", title, bundle);
+        this.putKVInBundle("messageBody", messageBody, bundle);
+        this.putKVInBundle("vibrate", vibrate, bundle);
+        this.putKVInBundle("lights", lights, bundle);
+        this.putKVInBundle("color", color, bundle);
 
         if (showNotification) {
             Intent intent;
@@ -394,7 +400,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
-                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/gongdoc.mp3");
+                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 notificationBuilder.setSound(soundPath);
 
                 // lights
@@ -441,6 +447,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     Log.d(TAG, "Color: default");
                     notificationBuilder.setColor(defaultColor);
                 }
+            }
+
+            // Icon
+            int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
+            int customSmallIconResID = 0;
+            if(icon != null){
+                customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
             }
 
             // Build notification

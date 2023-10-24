@@ -2736,7 +2736,7 @@ public class FirebasePlugin extends CordovaPlugin {
                 Log.d(TAG, "Channel "+id+" - sound=ringtone");
             } else if (!sound.contentEquals("false")) {
                 if(!sound.contentEquals("default")){
-                    Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/" + sound);
+                    Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/gongdoc");
                     channel.setSound(soundUri, audioAttributes);
                     Log.d(TAG, "Channel "+id+" - sound="+sound);
                 } else {

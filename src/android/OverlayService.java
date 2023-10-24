@@ -231,7 +231,7 @@ public class OverlayService extends Service {
             String sound = bundle.getString("sound");
             if (sound != null) {
                 Log.d(TAG, "sound before path is: " + sound);
-                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
+                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 Log.d(TAG, "Parsed sound is: " + soundPath.toString());
             } else {
                 Log.d(TAG, "Sound was null ");

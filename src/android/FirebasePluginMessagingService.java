@@ -338,7 +338,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                sendMessage(id, title, text, data, showNotification, sound, lights, vibrate);
+                sendMessage(id, title, text, data, showNotification, sound, lights);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -373,7 +373,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String sound, String lights, String vibrate) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String sound, String lights) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
@@ -451,23 +451,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 notificationBuilder.setSmallIcon(resID);
             } else {
                 notificationBuilder.setSmallIcon(getApplicationInfo().icon);
-            }
-
-            // Vibrate
-            if (vibrate != null){
-                try {
-                    String[] sVibrations = vibrate.replaceAll("\\s", "").split(",");
-                    long[] lVibrations = new long[sVibrations.length];
-                    int i=0;
-                    for(String sVibration: sVibrations){
-                        lVibrations[i] = Integer.parseInt(sVibration.trim());
-                        i++;
-                    }
-                    notificationBuilder.setVibrate(lVibrations);
-                    Log.d(TAG, "Vibrate: "+vibrate);
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                }
             }
 
             if (lights != null) {

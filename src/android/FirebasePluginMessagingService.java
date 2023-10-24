@@ -442,8 +442,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bigContentView.setTextViewText(titleId, title);
             bigContentView.setTextViewText(contentId, messageBody);
 
-            
-
             notificationBuilder
                     .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                     .setGroup(groupId)
@@ -452,7 +450,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     .setCustomBigContentView(bigContentView)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_MAX);
 
@@ -483,15 +480,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 notificationBuilder.setColor(getResources().getColor(accentID, null));
             }
 
-            Uri soundPath = defaultSoundUri;
-            if (sound != null) {
-                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/gongdoc.mp3");
-                notificationBuilder.setSound(soundPath);
-            } else {
-                Log.d(TAG, "Sound was null ");
-                notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
-            }
-
+            Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/gongdoc.mp3");
+            notificationBuilder.setSound(soundPath);
+            
             long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
             AudioManager audioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
             if (audioManager != null) {

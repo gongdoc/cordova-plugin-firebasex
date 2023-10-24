@@ -174,6 +174,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 id = remoteMessage.getMessageId();
                 // Notification message payload
                 // Log.i(TAG, "Received message: notification");
+                RemoteMessage.Notification notification = remoteMessage.getNotification();
                 messageType = "notification";
                 // id = remoteMessage.getMessageId();
                 // RemoteMessage.Notification notification = remoteMessage.getNotification();
@@ -340,8 +341,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("lights", lights, bundle);
         this.putKVInBundle("color", color, bundle);
         this.putKVInBundle("channel_id", channelId, bundle);
-        this.putKVInBundle("priority", priority, bundle);
-        this.putKVInBundle("visibility", visibility, bundle);
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
         
         if (showNotification) {

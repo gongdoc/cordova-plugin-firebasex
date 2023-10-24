@@ -325,7 +325,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrator, String color, String sound, String channelId, String messageType) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String sound, String channelId, String messageType) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));

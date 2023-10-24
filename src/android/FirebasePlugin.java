@@ -2731,7 +2731,7 @@ public class FirebasePlugin extends CordovaPlugin {
             }
 
             AudioAttributes audioAttributes = audioAttributesBuilder.build();
-            Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + + "/res/raw/" + sound);
+            Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/res/raw/" + sound);
             channel.setSound(soundUri, audioAttributes);
 
             // Vibration: if vibration setting is an array set vibration pattern, else set enable vibration.

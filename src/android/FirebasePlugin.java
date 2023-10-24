@@ -2731,22 +2731,8 @@ public class FirebasePlugin extends CordovaPlugin {
             }
 
             AudioAttributes audioAttributes = audioAttributesBuilder.build();
-            if ("ringtone".equals(sound)) {
-                channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), audioAttributes);
-                Log.d(TAG, "Channel "+id+" - sound=ringtone");
-            } else if (!sound.contentEquals("false")) {
-                if(!sound.contentEquals("default")){
-                    Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/gongdoc");
-                    channel.setSound(soundUri, audioAttributes);
-                    Log.d(TAG, "Channel "+id+" - sound="+sound);
-                } else {
-                    channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), audioAttributes);
-                    Log.d(TAG, "Channel "+id+" - sound=default");
-                }
-            } else {
-                channel.setSound(null, null);
-                Log.d(TAG, "Channel "+id+" - sound=none");
-            }
+            Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/raw/gongdoc");
+            channel.setSound(soundUri, audioAttributes);
 
             // Vibration: if vibration setting is an array set vibration pattern, else set enable vibration.
             JSONArray pattern = options.optJSONArray("vibration");

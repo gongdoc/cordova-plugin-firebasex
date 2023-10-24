@@ -216,23 +216,23 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 sound = data.get("sound");
                 lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
 
-                // if(data.containsKey("notification_foreground")){
-                //     foregroundNotification = true;
-                // }
-                // if(data.containsKey("notification_title")) title = data.get("notification_title");
-                // if(data.containsKey("notification_body")) body = data.get("notification_body");
-                // if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
-                // if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
-                // if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
-                // if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
-                // if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
-                // if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
-                // if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");
-                // if(data.containsKey("notification_android_icon")) icon = data.get("notification_android_icon");
-                // if(data.containsKey("notification_android_visibility")) visibility = data.get("notification_android_visibility");
-                // if(data.containsKey("notification_android_priority")) priority = data.get("notification_android_priority");
-                // if(data.containsKey("notification_android_image")) image = data.get("notification_android_image");
-                // if(data.containsKey("notification_android_image_type")) imageType = data.get("notification_android_image_type");
+                if(data.containsKey("notification_foreground")){
+                    foregroundNotification = true;
+                }
+                if(data.containsKey("notification_title")) title = data.get("notification_title");
+                if(data.containsKey("notification_body")) body = data.get("notification_body");
+                if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
+                if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
+                if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
+                if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
+                if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
+                if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
+                if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");
+                if(data.containsKey("notification_android_icon")) icon = data.get("notification_android_icon");
+                if(data.containsKey("notification_android_visibility")) visibility = data.get("notification_android_visibility");
+                if(data.containsKey("notification_android_priority")) priority = data.get("notification_android_priority");
+                if(data.containsKey("notification_android_image")) image = data.get("notification_android_image");
+                if(data.containsKey("notification_android_image_type")) imageType = data.get("notification_android_image_type");
             }
 
             if (TextUtils.isEmpty(id)) {
@@ -370,10 +370,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
 
             
-            // if (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title) || (data != null && !data.isEmpty())) {
-            //     boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
-            //     sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
-            // }
+            if (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title) || (data != null && !data.isEmpty())) {
+                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
+                sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
+            }
         }catch (Exception e){
             FirebasePlugin.handleExceptionWithoutContext(e);
         }

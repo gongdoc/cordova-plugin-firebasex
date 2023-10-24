@@ -286,7 +286,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 vibrate = "500, 200, 500";
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon);
+                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -321,7 +321,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));

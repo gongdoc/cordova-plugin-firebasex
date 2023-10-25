@@ -212,6 +212,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 id = data.get("id");
                 wakeUp = data.get("wakeUp");
                 lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
+                sound = data.get("sound");
 
                 if(data.containsKey("notification_foreground")){
                     foregroundNotification = true;
@@ -286,7 +287,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 vibrate = "500, 200, 500";
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon);
+                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -321,7 +322,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon, String sound) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
@@ -334,6 +335,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("vibrate", vibrate, bundle);
         this.putKVInBundle("lights", lights, bundle);
         this.putKVInBundle("color", color, bundle);
+        this.putKVInBundle("sound", sound, bundle);
 
         if (showNotification) {
             Intent intent;
@@ -354,7 +356,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             String channelId = this.getStringResource("default_notification_channel_id");
             String channelName = this.getStringResource("default_notification_channel_name");
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
 
@@ -400,7 +401,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
-                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
+                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
                 notificationBuilder.setSound(soundPath);
 
                 // lights

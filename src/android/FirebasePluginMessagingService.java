@@ -150,6 +150,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             String[] bodyLocArgs = null;
             String bodyHtml = null;
             String id = null;
+            String sound = null;
             String vibrate = null;
             String light = null;
             String color = null;
@@ -222,6 +223,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
                 if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
                 if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
+                if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
                 if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
                 if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
                 if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");

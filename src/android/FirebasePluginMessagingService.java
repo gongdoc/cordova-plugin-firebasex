@@ -188,8 +188,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     channelId = notification.getChannelId();
                 }
                 sound = notification.getSound();
-                // color = notification.getColor();
-                // icon = notification.getIcon();
+                color = notification.getColor();
+                icon = notification.getIcon();
                 // if (notification.getImageUrl() != null) {
                 //     image = notification.getImageUrl().toString();
                 // }
@@ -289,8 +289,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                vibrate = "500, 200, 500";
-                color = "#ff0000";
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId, messageType);
 
                 PushWakeLock.releaseWakeLock();
@@ -418,7 +416,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
                     Log.d(TAG, "Sound: default");
                 }else{
-                    Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/" + sound);
+                    Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
                     Log.d(TAG, "Sound: custom=" + sound+"; path="+soundPath.toString());
                     notificationBuilder.setSound(soundPath);
                 }

@@ -403,7 +403,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
-                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
+                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 notificationBuilder.setSound(soundPath);
 
                 // lights

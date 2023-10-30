@@ -286,7 +286,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                             if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
                                 Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
                                 if (sound != null) {
-                                    soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
+                                    soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                                 }
 
                                 final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -506,6 +506,37 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             int customSmallIconResID = 0;
             if(icon != null){
                 customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
+            }
+
+            if (customSmallIconResID != 0) {
+                notificationBuilder.setSmallIcon(customSmallIconResID);
+                Log.d(TAG, "Small icon: custom="+icon);
+            }else if (defaultSmallIconResID != 0) {
+                Log.d(TAG, "Small icon: default="+defaultSmallIconName);
+                notificationBuilder.setSmallIcon(defaultSmallIconResID);
+            } else {
+                Log.d(TAG, "Small icon: application");
+                notificationBuilder.setSmallIcon(getApplicationInfo().icon);
+            }
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                int defaultLargeIconResID = getResources().getIdentifier(defaultLargeIconName, "drawable", getPackageName());
+                int customLargeIconResID = 0;
+                if(icon != null){
+                    customLargeIconResID = getResources().getIdentifier(icon+"_large", "drawable", getPackageName());
+                }
+
+                int largeIconResID;
+                if (customLargeIconResID != 0 || defaultLargeIconResID != 0) {
+                    if (customLargeIconResID != 0) {
+                        largeIconResID = customLargeIconResID;
+                        Log.d(TAG, "Large icon: custom="+icon);
+                    }else{
+                        Log.d(TAG, "Large icon: default="+defaultLargeIconName);
+                        largeIconResID = defaultLargeIconResID;
+                    }
+                    notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), largeIconResID));
+                }
             }
 
             // Build notification

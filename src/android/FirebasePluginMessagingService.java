@@ -457,6 +457,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 // test
                 long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
+                AudioManager audioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
                 Notification notification = notificationBuilder.build();
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     int iconID = android.R.id.icon;

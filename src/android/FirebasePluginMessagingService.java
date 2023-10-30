@@ -406,6 +406,48 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 notificationBuilder.setSound(soundPath);
 
+                // Build notification
+                Notification notification = notificationBuilder.build();
+
+                // Display notification
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                Log.d(TAG, "show notification: "+notification.toString());
+
+                AudioManager audioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+                long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
+                if (notificationManager != null) {
+                    // Since android Oreo notification channel is needed.
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+
+                        AudioAttributes attributes = new AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                .build();
+                        if (sound != null) {
+                            channel.setSound(soundPath, attributes);
+                        } else {
+                            Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            channel.setSound(uri, attributes);
+                        }
+
+                        notificationManager.createNotificationChannel(channel);
+                    }
+
+                    if (android.os.Build.VERSION.SDK_INT >= 26) {
+                        if (audioManager != null) {
+                            int ringerMode = audioManager.getRingerMode();
+                            if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+                                NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+                                if (channel.shouldVibrate()) {
+                                    channel.setVibrationPattern(defaultVibration);
+                                }
+                            }
+                        }
+                    }
+
+                    notificationManager.notify(id.hashCode(), notification);
+                }
+
                 // lights
                 if (lights != null) {
                     try {
@@ -459,45 +501,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
             }
 
-            // Build notification
-            Notification notification = notificationBuilder.build();
-
-            // Display notification
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            Log.d(TAG, "show notification: "+notification.toString());
-
-            if (notificationManager != null) {
-                // Since android Oreo notification channel is needed.
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-
-                    AudioAttributes attributes = new AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                            .build();
-                    if (sound != null) {
-                        channel.setSound(soundPath, attributes);
-                    } else {
-                        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        channel.setSound(uri, attributes);
-                    }
-
-                    notificationManager.createNotificationChannel(channel);
-                }
-
-                if (android.os.Build.VERSION.SDK_INT >= 26) {
-                    if (audioManager != null) {
-                        int ringerMode = audioManager.getRingerMode();
-                        if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-                            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-                            if (channel.shouldVibrate()) {
-                                channel.setVibrationPattern(defaultVibration);
-                            }
-                        }
-                    }
-                }
-
-                notificationManager.notify(id.hashCode(), notification);
-            }
+            
         } else {
             bundle.putBoolean("tap", false);
             bundle.putString("title", title);

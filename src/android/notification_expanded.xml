@@ -29,11 +29,11 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <!-- <ImageView
+    <ImageView
         android:id="@+id/notificationIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/app_name"
-        android:src="@mipmap/icon" /> -->
+        android:src="@mipmap/icon" />
 </RelativeLayout>

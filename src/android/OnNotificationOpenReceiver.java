@@ -20,10 +20,12 @@ public class OnNotificationOpenReceiver extends BroadcastReceiver {
             launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             Bundle data = intent.getExtras();
-            if(!data.containsKey("messageType")) data.putString("messageType", "notification");
-            data.putString("tap", FirebasePlugin.inBackground() ? "background" : "foreground");
 
-            Log.d(FirebasePlugin.TAG, "OnNotificationOpenReceiver.onReceive(): "+data.toString());
+            // if(!data.containsKey("messageType")) data.putString("messageType", "notification");
+            // data.putString("tap", FirebasePlugin.inBackground() ? "background" : "foreground");
+
+            // Log.d(FirebasePlugin.TAG, "OnNotificationOpenReceiver.onReceive(): "+data.toString());
+            data.putBoolean("tap", true);
 
             FirebasePlugin.sendMessage(data, context);
 

@@ -169,36 +169,36 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Map<String, String> data = remoteMessage.getData();
 
             if (remoteMessage.getNotification() != null) {
-                title = remoteMessage.getNotification().getTitle();
-                text = remoteMessage.getNotification().getBody();
-                id = remoteMessage.getMessageId();
+                // title = remoteMessage.getNotification().getTitle();
+                // text = remoteMessage.getNotification().getBody();
+                // id = remoteMessage.getMessageId();
                 // Notification message payload
                 // Log.i(TAG, "Received message: notification");
                 messageType = "notification";
-                // RemoteMessage.Notification notification = remoteMessage.getNotification();
-                // title = notification.getTitle();
-                // titleLocKey = notification.getTitleLocalizationKey();
-                // titleLocArgs = notification.getTitleLocalizationArgs();
-                // body = notification.getBody();
-                // bodyLocKey = notification.getBodyLocalizationKey();
-                // bodyLocArgs = notification.getBodyLocalizationArgs();
-                // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                //     channelId = notification.getChannelId();
-                // }
-                // sound = notification.getSound();
-                // color = notification.getColor();
-                // icon = notification.getIcon();
-                // if (notification.getImageUrl() != null) {
-                //     image = notification.getImageUrl().toString();
-                // }
-                // if (!TextUtils.isEmpty(titleLocKey)) {
-                //     int titleId = getResources().getIdentifier(titleLocKey, "string", getPackageName());
-                //     title = String.format(getResources().getString(titleId), (Object[])titleLocArgs);
-                // }
-                // if (!TextUtils.isEmpty(bodyLocKey)) {
-                //     int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
-                //     body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
-                // }
+                RemoteMessage.Notification notification = remoteMessage.getNotification();
+                title = notification.getTitle();
+                titleLocKey = notification.getTitleLocalizationKey();
+                titleLocArgs = notification.getTitleLocalizationArgs();
+                body = notification.getBody();
+                bodyLocKey = notification.getBodyLocalizationKey();
+                bodyLocArgs = notification.getBodyLocalizationArgs();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    channelId = notification.getChannelId();
+                }
+                sound = notification.getSound();
+                color = notification.getColor();
+                icon = notification.getIcon();
+                if (notification.getImageUrl() != null) {
+                    image = notification.getImageUrl().toString();
+                }
+                if (!TextUtils.isEmpty(titleLocKey)) {
+                    int titleId = getResources().getIdentifier(titleLocKey, "string", getPackageName());
+                    title = String.format(getResources().getString(titleId), (Object[])titleLocArgs);
+                }
+                if (!TextUtils.isEmpty(bodyLocKey)) {
+                    int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
+                    body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
+                }
             }else{
                 Log.i(TAG, "Received message: data");
                 messageType = "data";
@@ -406,6 +406,48 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 notificationBuilder.setSound(soundPath);
 
+                // Build notification
+                Notification notification = notificationBuilder.build();
+
+                // Display notification
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                Log.d(TAG, "show notification: "+notification.toString());
+
+                AudioManager audioManager = (AudioManager)getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+                long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
+                if (notificationManager != null) {
+                    // Since android Oreo notification channel is needed.
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+
+                        AudioAttributes attributes = new AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                .build();
+                        if (sound != null) {
+                            channel.setSound(soundPath, attributes);
+                        } else {
+                            Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            channel.setSound(uri, attributes);
+                        }
+
+                        notificationManager.createNotificationChannel(channel);
+                    }
+
+                    if (android.os.Build.VERSION.SDK_INT >= 26) {
+                        if (audioManager != null) {
+                            int ringerMode = audioManager.getRingerMode();
+                            if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+                                NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+                                if (channel.shouldVibrate()) {
+                                    channel.setVibrationPattern(defaultVibration);
+                                }
+                            }
+                        }
+                    }
+
+                    notificationManager.notify(id.hashCode(), notification);
+                }
+
                 // lights
                 if (lights != null) {
                     try {
@@ -459,13 +501,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
             }
 
-            // Build notification
-            Notification notification = notificationBuilder.build();
-
-            // Display notification
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            Log.d(TAG, "show notification: "+notification.toString());
-            notificationManager.notify(id.hashCode(), notification);
+            
         } else {
             bundle.putBoolean("tap", false);
             bundle.putString("title", title);

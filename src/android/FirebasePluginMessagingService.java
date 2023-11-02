@@ -142,7 +142,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             // TODO(developer): Handle FCM messages here.
             // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-            String messageType;
+            
             String title = null;
             String titleLocKey = null;
             String[] titleLocArgs = null;
@@ -333,7 +333,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
+                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, icon, sound);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -368,7 +368,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon, String sound) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String icon, String sound) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));

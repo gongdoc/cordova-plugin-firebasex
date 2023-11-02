@@ -201,9 +201,11 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 //     int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
                 //     body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
                 // }
-            } else if(data != null) {
+            } else {
                 messageType = "data";
-           
+            }
+
+            if (data != null) {
                 // Data message payload
                 flagWakeUp = data.get("flagWakeUp");
                 flagPush = data.get("flagPush");
@@ -289,7 +291,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 vibrate = "500, 200, 500";
                 color = "#ff0000";
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId, messageType);
-
+                   
                 PushWakeLock.releaseWakeLock();
             }
 

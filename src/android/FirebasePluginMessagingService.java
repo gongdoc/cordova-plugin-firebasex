@@ -201,7 +201,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 //     int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
                 //     body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
                 // }
-            }else if{
+            } else if(data != null) {
                 messageType = "data";
            
                 // Data message payload

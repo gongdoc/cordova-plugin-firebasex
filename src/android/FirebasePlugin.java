@@ -25,7 +25,6 @@ import androidx.core.app.NotificationManagerCompat;
 import android.util.Base64;
 import android.util.Log;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.EmailAuthCredential;
@@ -555,10 +554,25 @@ public class FirebasePlugin extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
-                    String currentToken = FirebaseInstanceId.getInstance().getToken();
-                    if (currentToken != null) {
-                        FirebasePlugin.sendToken(currentToken);
-                    }
+                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            try {
+                                if (task.isSuccessful() || task.getException() == null) {
+                                    String currentToken = task.getResult();
+                                    if (currentToken != null) {
+                                        FirebasePlugin.sendToken(currentToken);
+                                    }
+                                }else if(task.getException() != null){
+                                    callbackContext.error(task.getException().getMessage());
+                                }else{
+                                    callbackContext.error("Task failed for unknown reason");
+                                }
+                            } catch (Exception e) {
+                                handleExceptionWithContext(e, callbackContext);
+                            }
+                        };
+                    });
                 } catch (Exception e) {
                     handleExceptionWithContext(e, callbackContext);
                 }

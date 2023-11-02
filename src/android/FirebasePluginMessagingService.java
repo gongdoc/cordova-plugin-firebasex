@@ -531,7 +531,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bundle.putBoolean("tap", false);
             bundle.putString("title", title);
             bundle.putString("body", messageBody);
-            FirebasePlugin.sendNotification(bundle, this.getApplicationContext());
+            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
         }
     }
 

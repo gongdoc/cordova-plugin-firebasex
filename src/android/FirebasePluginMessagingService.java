@@ -288,8 +288,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                vibrate = "500, 200, 500";
-                color = "#ff0000";
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId, messageType);
                    
                 PushWakeLock.releaseWakeLock();

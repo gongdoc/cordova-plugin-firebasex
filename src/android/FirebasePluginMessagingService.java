@@ -336,9 +336,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
-                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                vibrate = "500, 200, 500";
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
+                sendMessage(id, title, text, data, lights, vibrate, color, messageType, icon, sound);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -373,7 +371,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon, String sound) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, String lights, String vibrate, String color, String messageType, String icon, String sound) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
@@ -388,170 +386,165 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("color", color, bundle);
         this.putKVInBundle("sound", sound, bundle);
 
-        // if (showNotification) {
-        //     Intent intent;
-        //     PendingIntent pendingIntent;
-        //     final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
+    
+        Intent intent;
+        PendingIntent pendingIntent;
+        final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
 
-        //     if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.S && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        //         intent = new Intent(this, OnNotificationReceiverActivity.class);
-        //         intent.putExtras(bundle);
-        //         pendingIntent = PendingIntent.getActivity(this, id.hashCode(), intent, flag);
-        //     }else{
-        //         intent = new Intent(this, OnNotificationOpenReceiver.class);
-        //         intent.putExtras(bundle);
-        //         pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, flag);
-        //     }
+        if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.S && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            intent = new Intent(this, OnNotificationReceiverActivity.class);
+            intent.putExtras(bundle);
+            pendingIntent = PendingIntent.getActivity(this, id.hashCode(), intent, flag);
+        }else{
+            intent = new Intent(this, OnNotificationOpenReceiver.class);
+            intent.putExtras(bundle);
+            pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, flag);
+        }
 
-        //     String groupId = getPackageName() + ".NOTIFICATIONS";
+        String groupId = getPackageName() + ".NOTIFICATIONS";
 
-        //     String channelId = this.getStringResource("default_notification_channel_id");
-        //     String channelName = this.getStringResource("default_notification_channel_name");
+        String channelId = this.getStringResource("default_notification_channel_id");
+        String channelName = this.getStringResource("default_notification_channel_name");
 
-        //     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
 
-        //     int contentViewId = getResources().getIdentifier("notification", "layout", getPackageName());
-        //     RemoteViews contentView = new RemoteViews(getPackageName(), contentViewId);
+        int contentViewId = getResources().getIdentifier("notification", "layout", getPackageName());
+        RemoteViews contentView = new RemoteViews(getPackageName(), contentViewId);
 
-        //     int bigContentViewId = getResources().getIdentifier("notification_expanded", "layout", getPackageName());
-        //     RemoteViews bigContentView = new RemoteViews(getPackageName(), bigContentViewId);
+        int bigContentViewId = getResources().getIdentifier("notification_expanded", "layout", getPackageName());
+        RemoteViews bigContentView = new RemoteViews(getPackageName(), bigContentViewId);
 
-        //     int titleId = getResources().getIdentifier("notificationTitle", "id", getPackageName());
-        //     int contentId = getResources().getIdentifier("notificationContent", "id", getPackageName());
+        int titleId = getResources().getIdentifier("notificationTitle", "id", getPackageName());
+        int contentId = getResources().getIdentifier("notificationContent", "id", getPackageName());
 
-        //     if (bundle.getString("type").equals("register")) {
-        //         String titleMessage = bundle.getString("workAddress");
-        //         String contentMessage = bundle.getString("workType") + "(" + bundle.getString("workEquipments") + ") - " + bundle.getString("workDate");
-        //         contentView.setTextViewText(titleId, titleMessage);
-        //         contentView.setTextViewText(contentId, contentMessage);
-        //     } else {
-        //         contentView.setTextViewText(titleId, title);
-        //         contentView.setTextViewText(contentId, messageBody);
-        //     }
+        if (bundle.getString("type").equals("register")) {
+            String titleMessage = bundle.getString("workAddress");
+            String contentMessage = bundle.getString("workType") + "(" + bundle.getString("workEquipments") + ") - " + bundle.getString("workDate");
+            contentView.setTextViewText(titleId, titleMessage);
+            contentView.setTextViewText(contentId, contentMessage);
+        } else {
+            contentView.setTextViewText(titleId, title);
+            contentView.setTextViewText(contentId, messageBody + "111111111111111111111111111111111");
+        }
 
-        //     bigContentView.setTextViewText(titleId, title);
-        //     bigContentView.setTextViewText(contentId, messageBody);
+        bigContentView.setTextViewText(titleId, title);
+        bigContentView.setTextViewText(contentId, messageBody + "2222222222222222222222222222");
 
-        //     notificationBuilder
-        //             .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-        //             .setGroup(groupId)
-        //             .setGroupSummary(true)
-        //             .setCustomContentView(contentView)
-        //             .setCustomBigContentView(bigContentView)
-        //             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        //             .setAutoCancel(true)
-        //             .setContentIntent(pendingIntent)
-        //             .setPriority(NotificationCompat.PRIORITY_MAX);
+        notificationBuilder
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setGroup(groupId)
+                .setGroupSummary(true)
+                .setCustomContentView(contentView)
+                .setCustomBigContentView(bigContentView)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX);
 
-        //     int resID = getResources().getIdentifier("ic_notification", "drawable", getPackageName());
-        //     if (resID != 0) {
-        //         notificationBuilder.setSmallIcon(resID);
-        //     } else {
-        //         notificationBuilder.setSmallIcon(getApplicationInfo().icon);
-        //     }
+        int resID = getResources().getIdentifier("ic_notification", "drawable", getPackageName());
+        if (resID != 0) {
+            notificationBuilder.setSmallIcon(resID);
+        } else {
+            notificationBuilder.setSmallIcon(getApplicationInfo().icon);
+        }
 
-        //     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-        //         // sound
-        //         Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
-        //         notificationBuilder.setSound(soundPath);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            // sound
+            Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
+            notificationBuilder.setSound(soundPath);
 
-        //         // lights
-        //         if (lights != null) {
-        //             try {
-        //                 String[] lightsComponents = lights.replaceAll("\\s", "").split(",");
-        //                 if (lightsComponents.length == 3) {
-        //                     int lightArgb = Color.parseColor(lightsComponents[0]);
-        //                     int lightOnMs = Integer.parseInt(lightsComponents[1]);
-        //                     int lightOffMs = Integer.parseInt(lightsComponents[2]);
+            // lights
+            if (lights != null) {
+                try {
+                    String[] lightsComponents = lights.replaceAll("\\s", "").split(",");
+                    if (lightsComponents.length == 3) {
+                        int lightArgb = Color.parseColor(lightsComponents[0]);
+                        int lightOnMs = Integer.parseInt(lightsComponents[1]);
+                        int lightOffMs = Integer.parseInt(lightsComponents[2]);
 
-        //                     notificationBuilder.setLights(lightArgb, lightOnMs, lightOffMs);
-        //                 }
-        //             } catch (Exception e) {
-        //                 Log.d(TAG, "Lights set failed");
-        //             }
-        //         }
+                        notificationBuilder.setLights(lightArgb, lightOnMs, lightOffMs);
+                    }
+                } catch (Exception e) {
+                    Log.d(TAG, "Lights set failed");
+                }
+            }
 
-        //         // Vibrate
-        //         if (vibrate != null){
-        //             try {
-        //                 String[] sVibrations = vibrate.replaceAll("\\s", "").split(",");
-        //                 long[] lVibrations = new long[sVibrations.length];
-        //                 int i=0;
-        //                 for(String sVibration: sVibrations){
-        //                     lVibrations[i] = Integer.parseInt(sVibration.trim());
-        //                     i++;
-        //                 }
-        //                 notificationBuilder.setVibrate(lVibrations);
-        //                 Log.d(TAG, "Vibrate: "+vibrate);
-        //             } catch (Exception e) {
-        //                 Log.e(TAG, e.getMessage());
-        //             }
-        //         }
-        //     }
+            // Vibrate
+            if (vibrate != null){
+                try {
+                    String[] sVibrations = vibrate.replaceAll("\\s", "").split(",");
+                    long[] lVibrations = new long[sVibrations.length];
+                    int i=0;
+                    for(String sVibration: sVibrations){
+                        lVibrations[i] = Integer.parseInt(sVibration.trim());
+                        i++;
+                    }
+                    notificationBuilder.setVibrate(lVibrations);
+                    Log.d(TAG, "Vibrate: "+vibrate);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }
 
-        //     // Color
-        //     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-        //         int defaultColor = getResources().getColor(getResources().getIdentifier("accent", "color", getPackageName()), null);
-        //         if(color != null){
-        //             notificationBuilder.setColor(Color.parseColor(color));
-        //             Log.d(TAG, "Color: custom="+color);
-        //         }else{
-        //             Log.d(TAG, "Color: default");
-        //             notificationBuilder.setColor(defaultColor);
-        //         }
-        //     }
+        // Color
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int defaultColor = getResources().getColor(getResources().getIdentifier("accent", "color", getPackageName()), null);
+            if(color != null){
+                notificationBuilder.setColor(Color.parseColor(color));
+                Log.d(TAG, "Color: custom="+color);
+            }else{
+                Log.d(TAG, "Color: default");
+                notificationBuilder.setColor(defaultColor);
+            }
+        }
 
-        //     // Icon
-        //     int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
-        //     int customSmallIconResID = 0;
-        //     if(icon != null){
-        //         customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
-        //     }
+        // Icon
+        int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
+        int customSmallIconResID = 0;
+        if(icon != null){
+            customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
+        }
 
-        //     if (customSmallIconResID != 0) {
-        //         notificationBuilder.setSmallIcon(customSmallIconResID);
-        //         Log.d(TAG, "Small icon: custom="+icon);
-        //     }else if (defaultSmallIconResID != 0) {
-        //         Log.d(TAG, "Small icon: default="+defaultSmallIconName);
-        //         notificationBuilder.setSmallIcon(defaultSmallIconResID);
-        //     } else {
-        //         Log.d(TAG, "Small icon: application");
-        //         notificationBuilder.setSmallIcon(getApplicationInfo().icon);
-        //     }
+        if (customSmallIconResID != 0) {
+            notificationBuilder.setSmallIcon(customSmallIconResID);
+            Log.d(TAG, "Small icon: custom="+icon);
+        }else if (defaultSmallIconResID != 0) {
+            Log.d(TAG, "Small icon: default="+defaultSmallIconName);
+            notificationBuilder.setSmallIcon(defaultSmallIconResID);
+        } else {
+            Log.d(TAG, "Small icon: application");
+            notificationBuilder.setSmallIcon(getApplicationInfo().icon);
+        }
 
-        //     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-        //         int defaultLargeIconResID = getResources().getIdentifier(defaultLargeIconName, "drawable", getPackageName());
-        //         int customLargeIconResID = 0;
-        //         if(icon != null){
-        //             customLargeIconResID = getResources().getIdentifier(icon+"_large", "drawable", getPackageName());
-        //         }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            int defaultLargeIconResID = getResources().getIdentifier(defaultLargeIconName, "drawable", getPackageName());
+            int customLargeIconResID = 0;
+            if(icon != null){
+                customLargeIconResID = getResources().getIdentifier(icon+"_large", "drawable", getPackageName());
+            }
 
-        //         int largeIconResID;
-        //         if (customLargeIconResID != 0 || defaultLargeIconResID != 0) {
-        //             if (customLargeIconResID != 0) {
-        //                 largeIconResID = customLargeIconResID;
-        //                 Log.d(TAG, "Large icon: custom="+icon);
-        //             }else{
-        //                 Log.d(TAG, "Large icon: default="+defaultLargeIconName);
-        //                 largeIconResID = defaultLargeIconResID;
-        //             }
-        //             notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), largeIconResID));
-        //         }
-        //     }
+            int largeIconResID;
+            if (customLargeIconResID != 0 || defaultLargeIconResID != 0) {
+                if (customLargeIconResID != 0) {
+                    largeIconResID = customLargeIconResID;
+                    Log.d(TAG, "Large icon: custom="+icon);
+                }else{
+                    Log.d(TAG, "Large icon: default="+defaultLargeIconName);
+                    largeIconResID = defaultLargeIconResID;
+                }
+                notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), largeIconResID));
+            }
+        }
 
-        //     // Build notification
-        //     Notification notification = notificationBuilder.build();
+        // Build notification
+        Notification notification = notificationBuilder.build();
 
-        //     // Display notification
-        //     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        //     Log.d(TAG, "show notification: "+notification.toString());
-        //     notificationManager.notify(id.hashCode(), notification);
-        // } else {
-            bundle.putBoolean("tap", false);
-            bundle.putString("title", title);
-            bundle.putString("body", messageBody);
-            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        //}
+        // Display notification
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Log.d(TAG, "show notification: "+notification.toString());
+        notificationManager.notify(id.hashCode(), notification);
+        
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

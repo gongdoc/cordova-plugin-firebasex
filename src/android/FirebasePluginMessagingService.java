@@ -421,12 +421,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             String titleMessage = bundle.getString("workAddress");
             String contentMessage = bundle.getString("workType") + "(" + bundle.getString("workEquipments") + ") - " + bundle.getString("workDate");
             contentView.setTextViewText(titleId, titleMessage);
-            contentView.setTextViewText(contentId, contentMessage);
+            contentView.setTextViewText(contentId, contentMessage + "000000000000000000000000000000");
         } else {
             contentView.setTextViewText(titleId, title);
             contentView.setTextViewText(contentId, messageBody + "111111111111111111111111111111111");
         }
 
+        // 이거됨
         bigContentView.setTextViewText(titleId, title);
         bigContentView.setTextViewText(contentId, messageBody + "2222222222222222222222222222");
 

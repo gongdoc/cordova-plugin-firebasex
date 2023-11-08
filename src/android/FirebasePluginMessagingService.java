@@ -419,15 +419,15 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
         if (bundle.getString("type").equals("register")) {
             String titleMessage = bundle.getString("workAddress");
-            String contentMessage = bundle.getString("workType") + "(" + bundle.getString("workEquipments") + ") - " + bundle.getString("workDate");
-            contentView.setTextViewText(titleId, titleMessage);
-            contentView.setTextViewText(contentId, contentMessage + "000000000000000000000000000000");
+            String contentMessage = bundle.getString("workType") + "(" + bundle.getString("workEquipments") + ")?????  - " + bundle.getString("workDate");
+            contentView.setTextViewText(titleId, titleMessage + "0000000000");
+            contentView.setTextViewText(contentId, contentMessage);
         } else {
             contentView.setTextViewText(titleId, title);
-            contentView.setTextViewText(contentId, messageBody + "111111111111111111111111111111111");
+            contentView.setTextViewText(contentId, messageBody + "1111111111");
         }
 
-        // 이거됨
+        // 푸시트레이
         bigContentView.setTextViewText(titleId, title);
         bigContentView.setTextViewText(contentId, messageBody + "2222222222222222222222222222");
 

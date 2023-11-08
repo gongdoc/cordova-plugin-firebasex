@@ -453,9 +453,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 notificationBuilder.setSmallIcon(getApplicationInfo().icon);
             }
 
+            Uri soundPath = '';
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
-                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
+                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 notificationBuilder.setSound(soundPath);
 
                 // lights

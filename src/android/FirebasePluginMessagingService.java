@@ -253,8 +253,12 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Context context = this.getApplicationContext();
 
             if (wakeUp != null && wakeUp.equals("Y")) {
-                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-                if (!notificationManagerCompat.areNotificationsEnabled()) return;
+                // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                // if (!notificationManagerCompat.areNotificationsEnabled()) return;
+
+                if(FirebasePlugin.applicationContext == null){
+                    FirebasePlugin.applicationContext = this.getApplicationContext();
+                }
 
                 boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 if (!showNotification) return;

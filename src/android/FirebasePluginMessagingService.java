@@ -548,26 +548,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             // Display notification
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                // Since android Oreo notification channel is needed.
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-
-                    AudioAttributes attributes = new AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                            .build();
-                    if (sound != null) {
-                        channel.setSound(soundPath, attributes);
-                    } else {
-                        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        channel.setSound(uri, attributes);
-                    }
-
-                    notificationManager.createNotificationChannel(channel);
-                }
-
-                notificationManager.notify(id.hashCode(), notification);
-            }
+            Log.d(TAG, "show notification: "+notification.toString());
+            notificationManager.notify(id.hashCode(), notification);
         } else {
             bundle.putBoolean("tap", false);
             bundle.putString("title", title);

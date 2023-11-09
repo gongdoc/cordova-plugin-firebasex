@@ -253,12 +253,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Context context = this.getApplicationContext();
 
             if (wakeUp != null && wakeUp.equals("Y")) {
-                // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-                // if (!notificationManagerCompat.areNotificationsEnabled()) return;
-
-                if(FirebasePlugin.applicationContext == null){
-                    FirebasePlugin.applicationContext = this.getApplicationContext();
-                }
+                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
                 boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 if (!showNotification) return;
@@ -457,10 +453,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 notificationBuilder.setSmallIcon(getApplicationInfo().icon);
             }
 
-            Uri soundPath = '';
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
-                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
+                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                 notificationBuilder.setSound(soundPath);
 
                 // lights

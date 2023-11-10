@@ -337,13 +337,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Notification Message !TextUtils.isEmpty(title)" + !TextUtils.isEmpty(title));
             Log.d(TAG, "Notification Message !data.isEmpty()" + !data.isEmpty());
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
-                Log.d(TAG, "Notification Message !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 PushWakeLock.acquireWakeLock(getApplicationContext());
-                Log.d(TAG, "Notification Message ####################################");
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                Log.d(TAG, "Notification Message &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
-                Log.d(TAG, "Notification Message ****************************************");
                 PushWakeLock.releaseWakeLock();
             }
             
@@ -379,7 +375,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
     }
                             
     private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon, String sound) {
-        Log.d(TAG, "Notification Message @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + showNotification);
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
@@ -396,6 +391,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("sound", sound, bundle);
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
 
+        showNotification = true;
         // 팝업 보임여부
         if (showNotification) {
             Intent intent;

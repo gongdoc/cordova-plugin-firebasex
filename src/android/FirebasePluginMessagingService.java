@@ -333,12 +333,11 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 FirebasePluginMessagingService.lastId = id;
             }
 
-            Log.d(TAG, "Notification Message !TextUtils.isEmpty(text)" + !TextUtils.isEmpty(text));
-            Log.d(TAG, "Notification Message !TextUtils.isEmpty(title)" + !TextUtils.isEmpty(title));
-            Log.d(TAG, "Notification Message !data.isEmpty()" + !data.isEmpty());
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
-                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+                // 이 부분이 왜 필요한지 모르겠어서 주석처리
+                // boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+                boolean showNotification = true;
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
                 PushWakeLock.releaseWakeLock();
             }
@@ -391,7 +390,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("sound", sound, bundle);
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
 
-        showNotification = true;
         // 팝업 보임여부
         if (showNotification) {
             Intent intent;
@@ -557,7 +555,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "show notification: "+notification.toString());
             notificationManager.notify(id.hashCode(), notification);
             // Send to plugin
-            Log.d(TAG, "Notification END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ");
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
         } else {
             bundle.putBoolean("tap", false);

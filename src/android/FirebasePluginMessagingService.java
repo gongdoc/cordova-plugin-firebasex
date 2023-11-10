@@ -386,8 +386,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("messageBody", messageBody, bundle);
         this.putKVInBundle("vibrate", vibrate, bundle);
         this.putKVInBundle("lights", lights, bundle);
+        this.putKVInBundle("icon", icon, bundle);
         this.putKVInBundle("color", color, bundle);
         this.putKVInBundle("sound", sound, bundle);
+        this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
 
         // 팝업 보임여부
         if (showNotification) {
@@ -409,7 +411,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             String channelId = this.getStringResource("default_notification_channel_id");
             String channelName = this.getStringResource("default_notification_channel_name");
-
+            Log.d(TAG, "Notification Message channelId: " + channelId);
+            Log.d(TAG, "Notification Message channelName: " + channelName);
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
 
             int contentViewId = getResources().getIdentifier("notification", "layout", getPackageName());
@@ -445,6 +448,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_MAX);
+
+            Log.d(TAG, "Notification Message NotificationCompat.VISIBILITY_PUBLIC: " + NotificationCompat.VISIBILITY_PUBLIC);
+            Log.d(TAG, "Notification Message NotificationCompat.PRIORITY_MAX: " + NotificationCompat.PRIORITY_MAX);                    
 
             int resID = getResources().getIdentifier("ic_notification", "drawable", getPackageName());
             if (resID != 0) {

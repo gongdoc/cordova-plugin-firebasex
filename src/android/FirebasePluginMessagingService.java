@@ -333,7 +333,11 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 FirebasePluginMessagingService.lastId = id;
             }
 
+            Log.d(TAG, "Notification Message !TextUtils.isEmpty(text)" + !TextUtils.isEmpty(text));
+            Log.d(TAG, "Notification Message !TextUtils.isEmpty(title)" + !TextUtils.isEmpty(title));
+            Log.d(TAG, "Notification Message !data.isEmpty()" + !data.isEmpty());
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
+                Log.d(TAG, "Notification Message !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));

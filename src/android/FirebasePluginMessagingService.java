@@ -556,12 +556,15 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             Log.d(TAG, "show notification: "+notification.toString());
             notificationManager.notify(id.hashCode(), notification);
+            // Send to plugin
+            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
         } else {
             bundle.putBoolean("tap", false);
             bundle.putString("title", title);
             bundle.putString("body", messageBody);
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
         }
+        
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

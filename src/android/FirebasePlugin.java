@@ -462,11 +462,13 @@ public class FirebasePlugin extends CordovaPlugin {
 
     @Override
     public void onPause(boolean multitasking) {
+        Log.d(TAG, "Notification Message onPause = true");
         FirebasePlugin.inBackground = true;
     }
 
     @Override
     public void onResume(boolean multitasking) {
+        Log.d(TAG, "Notification Message onResume = false");
         FirebasePlugin.inBackground = false;
     }
 
@@ -627,6 +629,7 @@ public class FirebasePlugin extends CordovaPlugin {
     }
 
     public static boolean hasNotificationsCallback() {
+        Log.d(TAG, "Notification Message FirebasePlugin.notificationCallbackContext: " + FirebasePlugin.notificationCallbackContext);
         return FirebasePlugin.notificationCallbackContext != null;
     }
 

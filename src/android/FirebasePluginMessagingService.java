@@ -335,9 +335,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
-                // 이 부분이 왜 필요한지 모르겠어서 주석처리
-                // boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                boolean showNotification = true;
+                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+                Log.d(TAG, "Notification Message FirebasePlugin.inBackground(): " + FirebasePlugin.inBackground());
+                Log.d(TAG, "Notification Message !FirebasePlugin.hasNotificationsCallback(): " + !FirebasePlugin.hasNotificationsCallback());
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
                 PushWakeLock.releaseWakeLock();
             }

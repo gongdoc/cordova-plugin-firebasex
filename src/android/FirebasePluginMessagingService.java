@@ -201,7 +201,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 // }
             }else{
                 Log.i(TAG, "Received message: data");
-                messageType = "data";
+                // messageType = "data";
             }
 
             if (data != null) {
@@ -338,6 +338,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 Log.d(TAG, "Notification Message FirebasePlugin.inBackground(): " + FirebasePlugin.inBackground());
                 Log.d(TAG, "Notification Message !FirebasePlugin.hasNotificationsCallback(): " + !FirebasePlugin.hasNotificationsCallback());
+                showNotification = true;
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
                 PushWakeLock.releaseWakeLock();
             }

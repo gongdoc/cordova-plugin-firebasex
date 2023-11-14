@@ -340,7 +340,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("channel_id", channelId, bundle);
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
         
-        //if (showNotification) {
+        if (showNotification) {
             Intent intent;
             PendingIntent pendingIntent;
             final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
@@ -473,12 +473,12 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             Log.d(TAG, "show notification: "+notification.toString());
             notificationManager.notify(id.hashCode(), notification);
-        // } else {
-        //     bundle.putBoolean("tap", false);
-        //     bundle.putString("title", title);
-        //     bundle.putString("body", messageBody);
-        //     FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        // }
+        } else {
+            bundle.putBoolean("tap", false);
+            bundle.putString("title", title);
+            bundle.putString("body", messageBody);
+            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
+        }
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

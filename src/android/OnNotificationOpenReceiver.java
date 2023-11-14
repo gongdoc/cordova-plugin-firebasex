@@ -22,7 +22,8 @@ public class OnNotificationOpenReceiver extends BroadcastReceiver {
             Bundle data = intent.getExtras();
            //  if(!data.containsKey("messageType")) data.putString("messageType", "notification");
             if(!data.containsKey("messageType")) data.putString("messageType", "data");
-            data.putString("tap", FirebasePlugin.inBackground() ? "background" : "foreground");
+            // data.putString("tap", FirebasePlugin.inBackground() ? "background" : "foreground");
+            data.putBoolean("tap", true);
 
             Log.d(FirebasePlugin.TAG, "OnNotificationOpenReceiver.onReceive(): "+data.toString());
             

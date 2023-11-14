@@ -174,7 +174,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 id = remoteMessage.getMessageId();
                 // Notification message payload
                 // Log.i(TAG, "Received message: notification");
-                // messageType = "notification";
+                // RemoteMessage.Notification notification = remoteMessage.getNotification();
+                messageType = "notification";
+                // id = remoteMessage.getMessageId();
                 // RemoteMessage.Notification notification = remoteMessage.getNotification();
                 // title = notification.getTitle();
                 // titleLocKey = notification.getTitleLocalizationKey();
@@ -199,12 +201,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 //     int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
                 //     body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
                 // }
-            }else{
-                Log.i(TAG, "Received message: data");
-                // messageType = "data";
+            } else {
+                messageType = "data";
             }
 
-            messageType = "data";
             if (data != null) {
                 // Data message payload
                 flagWakeUp = data.get("flagWakeUp");
@@ -214,7 +214,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 id = data.get("id");
                 wakeUp = data.get("wakeUp");
                 lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
-                sound = data.get("sound");
 
                 if(data.containsKey("notification_foreground")){
                     foregroundNotification = true;
@@ -279,55 +278,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 intent.putExtras(bundle);
 
-                if (flagPush.equals("N")) {
-                    try {
-                        final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                        if (audioManager != null) {
-                            int ringerMode = audioManager.getRingerMode();
-                            if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                                Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
-                                if (sound != null) {
-                                    soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
-                                }
-
-                                final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                                final int volumeMusic = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                                int maxVolumeNotification = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-                                int volumeNotification = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
-
-                                int volume = volumeNotification * maxVolumeMusic / maxVolumeNotification;
-                                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-
-                                final MediaPlayer mediaPlayer = new MediaPlayer();
-                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                                mediaPlayer.setDataSource(getApplicationContext(), soundPath);
-                                mediaPlayer.prepare();
-                                mediaPlayer.start();
-                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                    public void onCompletion(MediaPlayer mp) {
-                                        mediaPlayer.release();
-                                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMusic, 0);
-                                    }
-                                });
-                            }
-
-                            if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-                                long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
-                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                if (vibrator != null && vibrator.hasVibrator()) {
-                                    if (android.os.Build.VERSION.SDK_INT >= 26) {
-                                        vibrator.vibrate(VibrationEffect.createWaveform(defaultVibration, -1));
-                                    } else {
-                                        vibrator.vibrate(defaultVibration, -1);
-                                    }
-                                }
-                            }
-                        }
-                    } catch (Exception ex) {
-                        Log.d(TAG, "Sound file load failed");
-                    }
-                }
-
                 startActivity(intent);
 
                 // save id
@@ -336,15 +286,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
+
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                Log.d(TAG, "Notification Message FirebasePlugin.inBackground(): " + FirebasePlugin.inBackground());
-                Log.d(TAG, "Notification Message !FirebasePlugin.hasNotificationsCallback(): " + !FirebasePlugin.hasNotificationsCallback());
-                
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
+                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId, messageType);
+                   
                 PushWakeLock.releaseWakeLock();
             }
-            
-            // 푸쉬 취소
+
             if (flagWakeUp.equals("X")) {
                 if (id.equals(FirebasePluginMessagingService.lastId)) {
                     Intent intent = new Intent();
@@ -375,7 +323,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon, String sound) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String sound, String channelId, String messageType) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
@@ -385,16 +333,14 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("id", id, bundle);
         this.putKVInBundle("title", title, bundle);
         this.putKVInBundle("messageBody", messageBody, bundle);
+        this.putKVInBundle("sound", sound, bundle);
         this.putKVInBundle("vibrate", vibrate, bundle);
         this.putKVInBundle("lights", lights, bundle);
-        this.putKVInBundle("icon", icon, bundle);
         this.putKVInBundle("color", color, bundle);
-        this.putKVInBundle("sound", sound, bundle);
+        this.putKVInBundle("channel_id", channelId, bundle);
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
-
-        // 팝업 보임여부
-        //if (showNotification) {
-            
+        
+        if (showNotification) {
             Intent intent;
             PendingIntent pendingIntent;
             final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
@@ -411,10 +357,14 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             String groupId = getPackageName() + ".NOTIFICATIONS";
 
-            String channelId = this.getStringResource("default_notification_channel_id");
-            String channelName = this.getStringResource("default_notification_channel_name");
-            Log.d(TAG, "Notification Message channelId: " + channelId);
-            Log.d(TAG, "Notification Message channelName: " + channelName);
+            // Channel
+            if(channelId == null || !FirebasePlugin.channelExists(channelId)){
+                channelId = FirebasePlugin.defaultChannelId;
+            }
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                Log.d(TAG, "Channel ID: "+channelId);
+            }
+
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
 
             int contentViewId = getResources().getIdentifier("notification", "layout", getPackageName());
@@ -426,7 +376,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             int titleId = getResources().getIdentifier("notificationTitle", "id", getPackageName());
             int contentId = getResources().getIdentifier("notificationContent", "id", getPackageName());
 
-            // 푸시 트레이
             if (bundle.getString("type").equals("register")) {
                 String titleMessage = bundle.getString("workAddress");
                 String contentMessage = bundle.getString("workType") + "(" + bundle.getString("workEquipments") + ") - " + bundle.getString("workDate");
@@ -451,9 +400,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_MAX);
 
-            Log.d(TAG, "Notification Message NotificationCompat.VISIBILITY_PUBLIC: " + NotificationCompat.VISIBILITY_PUBLIC);
-            Log.d(TAG, "Notification Message NotificationCompat.PRIORITY_MAX: " + NotificationCompat.PRIORITY_MAX);                    
-
             int resID = getResources().getIdentifier("ic_notification", "drawable", getPackageName());
             if (resID != 0) {
                 notificationBuilder.setSmallIcon(resID);
@@ -463,8 +409,16 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // sound
-                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
-                notificationBuilder.setSound(soundPath);
+                if (sound == null) {
+                    Log.d(TAG, "Sound: none");
+                }else if (sound.equals("default")) {
+                    notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                    Log.d(TAG, "Sound: default");
+                }else{
+                    Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/res/raw/" + sound);
+                    Log.d(TAG, "Sound: custom=" + sound+"; path="+soundPath.toString());
+                    notificationBuilder.setSound(soundPath);
+                }
 
                 // lights
                 if (lights != null) {
@@ -512,44 +466,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 }
             }
 
-            // Icon
-            int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
-            int customSmallIconResID = 0;
-            if(icon != null){
-                customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
-            }
-
-            if (customSmallIconResID != 0) {
-                notificationBuilder.setSmallIcon(customSmallIconResID);
-                Log.d(TAG, "Small icon: custom="+icon);
-            }else if (defaultSmallIconResID != 0) {
-                Log.d(TAG, "Small icon: default="+defaultSmallIconName);
-                notificationBuilder.setSmallIcon(defaultSmallIconResID);
-            } else {
-                Log.d(TAG, "Small icon: application");
-                notificationBuilder.setSmallIcon(getApplicationInfo().icon);
-            }
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                int defaultLargeIconResID = getResources().getIdentifier(defaultLargeIconName, "drawable", getPackageName());
-                int customLargeIconResID = 0;
-                if(icon != null){
-                    customLargeIconResID = getResources().getIdentifier(icon+"_large", "drawable", getPackageName());
-                }
-
-                int largeIconResID;
-                if (customLargeIconResID != 0 || defaultLargeIconResID != 0) {
-                    if (customLargeIconResID != 0) {
-                        largeIconResID = customLargeIconResID;
-                        Log.d(TAG, "Large icon: custom="+icon);
-                    }else{
-                        Log.d(TAG, "Large icon: default="+defaultLargeIconName);
-                        largeIconResID = defaultLargeIconResID;
-                    }
-                    notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), largeIconResID));
-                }
-            }
-
             // Build notification
             Notification notification = notificationBuilder.build();
 
@@ -557,15 +473,12 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             Log.d(TAG, "show notification: "+notification.toString());
             notificationManager.notify(id.hashCode(), notification);
-            // Send to plugin
+        } else {
+            bundle.putBoolean("tap", false);
+            bundle.putString("title", title);
+            bundle.putString("body", messageBody);
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        // } else {
-        //     bundle.putBoolean("tap", false);
-        //     bundle.putString("title", title);
-        //     bundle.putString("body", messageBody);
-        //     FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        // }
-        
+        }
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

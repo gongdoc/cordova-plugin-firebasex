@@ -228,8 +228,7 @@ public class FirebasePlugin extends CordovaPlugin {
                             FirebasePlugin.notificationStack = new ArrayList<Bundle>();
                         }
                         if (extras.containsKey("google.message_id")) {
-                            // extras.putString("messageType", "notification");
-                            extras.putString("messageType", "data");
+                            extras.putString("messageType", "notification");
                             extras.putString("tap", "background");
                             notificationStack.add(extras);
                             Log.d(TAG, "Notification message found on init: " + extras.toString());
@@ -640,8 +639,7 @@ public class FirebasePlugin extends CordovaPlugin {
             super.onNewIntent(intent);
             final Bundle data = intent.getExtras();
             if (data != null && data.containsKey("google.message_id")) {
-                // data.putString("messageType", "notification");
-                data.putString("messageType", "data");
+                data.putString("messageType", "notification");
                 data.putString("tap", "background");
                 Log.d(TAG, "Notification message on new intent: " + data.toString());
                 FirebasePlugin.sendMessage(data, applicationContext);

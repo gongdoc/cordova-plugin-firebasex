@@ -32,7 +32,8 @@ public class OnNotificationReceiverActivity extends Activity {
             launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             Bundle data = intent.getExtras();
-            if(!data.containsKey("messageType")) data.putString("messageType", "notification");
+            // if(!data.containsKey("messageType")) data.putString("messageType", "notification");
+            if(!data.containsKey("messageType")) data.putString("messageType", "data");
             data.putString("tap", FirebasePlugin.inBackground() ? "background" : "foreground");
 
             Log.d(FirebasePlugin.TAG, "OnNotificationReceiverActivity.handleNotification(): "+data.toString());

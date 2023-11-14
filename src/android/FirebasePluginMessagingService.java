@@ -174,7 +174,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 id = remoteMessage.getMessageId();
                 // Notification message payload
                 // Log.i(TAG, "Received message: notification");
-                messageType = "notification";
+                // messageType = "notification";
                 // RemoteMessage.Notification notification = remoteMessage.getNotification();
                 // title = notification.getTitle();
                 // titleLocKey = notification.getTitleLocalizationKey();
@@ -204,6 +204,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 // messageType = "data";
             }
 
+            messageType = "data";
             if (data != null) {
                 // Data message payload
                 flagWakeUp = data.get("flagWakeUp");
@@ -338,7 +339,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
                 Log.d(TAG, "Notification Message FirebasePlugin.inBackground(): " + FirebasePlugin.inBackground());
                 Log.d(TAG, "Notification Message !FirebasePlugin.hasNotificationsCallback(): " + !FirebasePlugin.hasNotificationsCallback());
-                showNotification = true;
+                
                 sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
                 PushWakeLock.releaseWakeLock();
             }
@@ -392,7 +393,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
 
         // 팝업 보임여부
-        if (showNotification) {
+        //if (showNotification) {
+            
             Intent intent;
             PendingIntent pendingIntent;
             final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
@@ -557,12 +559,12 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             notificationManager.notify(id.hashCode(), notification);
             // Send to plugin
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        } else {
-            bundle.putBoolean("tap", false);
-            bundle.putString("title", title);
-            bundle.putString("body", messageBody);
-            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        }
+        // } else {
+        //     bundle.putBoolean("tap", false);
+        //     bundle.putString("title", title);
+        //     bundle.putString("body", messageBody);
+        //     FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
+        // }
         
     }
 

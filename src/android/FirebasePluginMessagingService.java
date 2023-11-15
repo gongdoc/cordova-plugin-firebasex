@@ -139,11 +139,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             String flagWakeUp = "";
             String flagPush = "";
-            String title = "";
             String text = "";
-            String id = "";
             String wakeUp = "";
-            String sound = "";
             String lights = "";
 
             Map<String, String> data = remoteMessage.getData();

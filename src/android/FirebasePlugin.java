@@ -131,8 +131,6 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
-
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class FirebasePlugin extends CordovaPlugin {
@@ -229,7 +227,8 @@ public class FirebasePlugin extends CordovaPlugin {
                         }
                         if (extras.containsKey("google.message_id")) {
                             extras.putString("messageType", "notification");
-                            extras.putBoolean("tap", true);
+                            // extras.putBoolean("tap", true);
+                            extras.putString("tap", "background");
                             notificationStack.add(extras);
                             Log.d(TAG, "Notification message found on init: " + extras.toString());
                         }
@@ -253,7 +252,6 @@ public class FirebasePlugin extends CordovaPlugin {
                 this.getToken(args, callbackContext);
             } else if (action.equals("hasPermission")) {
                 this.hasPermission(callbackContext);
-                return true;
             } else if (action.equals("grantPermission")) {
                 this.grantPermission(callbackContext);
             } else if (action.equals("subscribe")) {
@@ -462,13 +460,11 @@ public class FirebasePlugin extends CordovaPlugin {
 
     @Override
     public void onPause(boolean multitasking) {
-        Log.d(TAG, "Notification Message onPause = true");
         FirebasePlugin.inBackground = true;
     }
 
     @Override
     public void onResume(boolean multitasking) {
-        Log.d(TAG, "Notification Message onResume = false");
         FirebasePlugin.inBackground = false;
     }
 
@@ -640,7 +636,8 @@ public class FirebasePlugin extends CordovaPlugin {
             final Bundle data = intent.getExtras();
             if (data != null && data.containsKey("google.message_id")) {
                 data.putString("messageType", "notification");
-                data.putBoolean("tap", true);
+                data.putString("tap", "background");
+                //data.putBoolean("tap", true);
                 Log.d(TAG, "Notification message on new intent: " + data.toString());
                 FirebasePlugin.sendMessage(data, applicationContext);
             }

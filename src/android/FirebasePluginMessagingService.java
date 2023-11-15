@@ -18,6 +18,7 @@ import android.os.PowerManager;
 import android.os.Vibrator;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.VibrationEffect;
 
 import android.util.Log;
 import android.app.Notification;
@@ -32,7 +33,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Paint;
 import android.graphics.Canvas;
-
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;

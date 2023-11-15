@@ -348,6 +348,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 Log.d(TAG, "Channel ID: "+channelId);
             }
 
+            String groupId = getPackageName() + ".NOTIFICATIONS";
+
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
 
             int contentViewId = getResources().getIdentifier("notification", "layout", getPackageName());

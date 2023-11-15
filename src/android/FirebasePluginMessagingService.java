@@ -141,7 +141,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             // TODO(developer): Handle FCM messages here.
             // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-            String messageType;
             String title = null;
             String titleLocKey = null;
             String[] titleLocArgs = null;
@@ -175,7 +174,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 // Notification message payload
                 // Log.i(TAG, "Received message: notification");
                 // RemoteMessage.Notification notification = remoteMessage.getNotification();
-                messageType = "notification";
                 // id = remoteMessage.getMessageId();
                 // RemoteMessage.Notification notification = remoteMessage.getNotification();
                 // title = notification.getTitle();
@@ -201,11 +199,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 //     int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
                 //     body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
                 // }
-            } else {
-                messageType = "data";
-            }
-
-            if (data != null) {
+            } else if (data != null) {
                 // Data message payload
                 flagWakeUp = data.get("flagWakeUp");
                 flagPush = data.get("flagPush");
@@ -215,23 +209,27 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 wakeUp = data.get("wakeUp");
                 lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
 
-                if(data.containsKey("notification_foreground")){
-                    foregroundNotification = true;
+                if (TextUtils.isEmpty(text)) {
+                    text = data.get("body");
                 }
-                if(data.containsKey("notification_title")) title = data.get("notification_title");
-                if(data.containsKey("notification_body")) body = data.get("notification_body");
-                if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
-                if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
-                if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
-                if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
-                if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
-                if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
-                if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");
-                if(data.containsKey("notification_android_icon")) icon = data.get("notification_android_icon");
-                if(data.containsKey("notification_android_visibility")) visibility = data.get("notification_android_visibility");
-                if(data.containsKey("notification_android_priority")) priority = data.get("notification_android_priority");
-                if(data.containsKey("notification_android_image")) image = data.get("notification_android_image");
-                if(data.containsKey("notification_android_image_type")) imageType = data.get("notification_android_image_type");
+
+                // if(data.containsKey("notification_foreground")){
+                //     foregroundNotification = true;
+                // }
+                // if(data.containsKey("notification_title")) title = data.get("notification_title");
+                // if(data.containsKey("notification_body")) body = data.get("notification_body");
+                // if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
+                // if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
+                // if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
+                // if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
+                // if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
+                // if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
+                // if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");
+                // if(data.containsKey("notification_android_icon")) icon = data.get("notification_android_icon");
+                // if(data.containsKey("notification_android_visibility")) visibility = data.get("notification_android_visibility");
+                // if(data.containsKey("notification_android_priority")) priority = data.get("notification_android_priority");
+                // if(data.containsKey("notification_android_image")) image = data.get("notification_android_image");
+                // if(data.containsKey("notification_android_image_type")) imageType = data.get("notification_android_image_type");
             }
 
             if (TextUtils.isEmpty(id)) {
@@ -288,7 +286,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId, messageType);
+                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId);
                    
                 PushWakeLock.releaseWakeLock();
             }
@@ -323,47 +321,22 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String sound, String channelId, String messageType) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String sound, String channelId) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
         }
-
-        bundle.putString("messageType", messageType);
-        this.putKVInBundle("id", id, bundle);
-        this.putKVInBundle("title", title, bundle);
-        this.putKVInBundle("messageBody", messageBody, bundle);
-        this.putKVInBundle("sound", sound, bundle);
-        this.putKVInBundle("vibrate", vibrate, bundle);
-        this.putKVInBundle("lights", lights, bundle);
-        this.putKVInBundle("color", color, bundle);
-        this.putKVInBundle("channel_id", channelId, bundle);
-        this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
-        
+ 
         if (showNotification) {
-            Intent intent;
-            PendingIntent pendingIntent;
-            final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
-
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.S && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                intent = new Intent(this, OnNotificationReceiverActivity.class);
-                intent.putExtras(bundle);
-                pendingIntent = PendingIntent.getActivity(this, id.hashCode(), intent, flag);
-            }else{
-                intent = new Intent(this, OnNotificationOpenReceiver.class);
-                intent.putExtras(bundle);
-                pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, flag);
-            }
+            Intent intent = new Intent(this, OnNotificationOpenReceiver.class);
+            intent.putExtras(bundle);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             String groupId = getPackageName() + ".NOTIFICATIONS";
 
-            // Channel
-            if(channelId == null || !FirebasePlugin.channelExists(channelId)){
-                channelId = FirebasePlugin.defaultChannelId;
-            }
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                Log.d(TAG, "Channel ID: "+channelId);
-            }
+            String channelId = this.getStringResource("default_notification_channel_id");
+            String channelName = this.getStringResource("default_notification_channel_name");
+            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
 
@@ -474,7 +447,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "show notification: "+notification.toString());
             notificationManager.notify(id.hashCode(), notification);
         } else {
-            bundle.putString("tap", FirebasePlugin.inBackground() ? "background" : "foreground");
+            bundle.putBoolean("tap", false);
             bundle.putString("title", title);
             bundle.putString("body", messageBody);
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());

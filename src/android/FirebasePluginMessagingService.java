@@ -193,15 +193,15 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             flagWakeUp = data.get("flagWakeUp");
             flagPush = data.get("flagPush");
             title = data.get("title");
-            text = data.get("text");
+            body = data.get("text");
             id = data.get("id");
             wakeUp = data.get("wakeUp");
             sound = data.get("sound");
             lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
 
-            if (TextUtils.isEmpty(text)) {
-                text = data.get("body");
-            }
+            // if (TextUtils.isEmpty(text)) {
+            //     text = data.get("body");
+            // }
             // if(data.containsKey("notification_foreground")){
             //     foregroundNotification = true;
             // }
@@ -280,7 +280,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                         if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
                             Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
                             if (sound != null) {
-                                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
+                                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                             }
 
                             final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -322,7 +322,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
 
             startActivity(intent);
-
 
             // save id
             FirebasePluginMessagingService.lastId = id;
@@ -408,7 +407,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, flag);
             }
 
-
             // Channel
             if(channelId == null || !FirebasePlugin.channelExists(channelId)){
                 channelId = FirebasePlugin.defaultChannelId;
@@ -416,7 +414,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                 Log.d(TAG, "Channel ID: "+channelId);
             }
-
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
             notificationBuilder
@@ -434,7 +431,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(body));
             }
 
-
             // On Android O+ the sound/lights/vibration are determined by the channel ID
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // Sound
@@ -444,7 +440,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
                     Log.d(TAG, "Sound: default");
                 }else{
-                    Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/" + sound);
+                    Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
                     Log.d(TAG, "Sound: custom=" + sound+"; path="+soundPath.toString());
                     notificationBuilder.setSound(soundPath);
                 }
@@ -481,7 +477,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     }
                 }
             }
-
 
             // Icon
             int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());

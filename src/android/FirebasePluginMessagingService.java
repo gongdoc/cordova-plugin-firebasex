@@ -154,7 +154,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         String light = null;
         String color = null;
         String icon = null;
-        String channelId = null;
         String visibility = null;
         String priority = null;
         String image = null;
@@ -335,7 +334,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             PushWakeLock.acquireWakeLock(getApplicationContext());
 
             boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-            sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound, channelId);
+            sendMessage(id, title, text, data, showNotification, lights, vibrate, color, sound);
                 
             PushWakeLock.releaseWakeLock();
         }
@@ -367,7 +366,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String sound, String channelId) {
+    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String sound) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));

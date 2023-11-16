@@ -24,7 +24,7 @@ public class OnNotificationOpenReceiver extends BroadcastReceiver {
             data.putString("tap", FirebasePlugin.inBackground() ? "background" : "foreground");
 
             Log.d(FirebasePlugin.TAG, "OnNotificationOpenReceiver.onReceive(): "+data.toString());
-            
+
             FirebasePlugin.sendMessage(data, context);
 
             launchIntent.putExtras(data);

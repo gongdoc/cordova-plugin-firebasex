@@ -131,6 +131,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
+
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class FirebasePlugin extends CordovaPlugin {
@@ -227,7 +229,6 @@ public class FirebasePlugin extends CordovaPlugin {
                         }
                         if (extras.containsKey("google.message_id")) {
                             extras.putString("messageType", "notification");
-                            // extras.putBoolean("tap", true);
                             extras.putString("tap", "background");
                             notificationStack.add(extras);
                             Log.d(TAG, "Notification message found on init: " + extras.toString());
@@ -252,9 +253,12 @@ public class FirebasePlugin extends CordovaPlugin {
                 this.getToken(args, callbackContext);
             } else if (action.equals("hasPermission")) {
                 this.hasPermission(callbackContext);
-            } else if (action.equals("grantPermission")) {
-                this.grantPermission(callbackContext);
-            } else if (action.equals("subscribe")) {
+                return true;
+            }
+            //  else if (action.equals("grantPermission")) {
+            //     this.grantPermission(callbackContext);
+            // } 
+            else if (action.equals("subscribe")) {
                 this.subscribe(callbackContext, args.getString(0));
             } else if (action.equals("unsubscribe")) {
                 this.unsubscribe(callbackContext, args.getString(0));
@@ -625,7 +629,6 @@ public class FirebasePlugin extends CordovaPlugin {
     }
 
     public static boolean hasNotificationsCallback() {
-        Log.d(TAG, "Notification Message FirebasePlugin.notificationCallbackContext: " + FirebasePlugin.notificationCallbackContext);
         return FirebasePlugin.notificationCallbackContext != null;
     }
 
@@ -637,7 +640,6 @@ public class FirebasePlugin extends CordovaPlugin {
             if (data != null && data.containsKey("google.message_id")) {
                 data.putString("messageType", "notification");
                 data.putString("tap", "background");
-                //data.putBoolean("tap", true);
                 Log.d(TAG, "Notification message on new intent: " + data.toString());
                 FirebasePlugin.sendMessage(data, applicationContext);
             }
@@ -698,27 +700,26 @@ public class FirebasePlugin extends CordovaPlugin {
         });
     }
 
-    private void grantPermission(final CallbackContext callbackContext) {
-        CordovaPlugin plugin = this;
-        cordova.getThreadPool().execute(new Runnable() {
-            public void run() {
-                try {
-                    if(Build.VERSION.SDK_INT >= 33){ // Android 13+
-                        boolean hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
-                        if(!hasRuntimePermission){
-                            String[] permissions = new String[]{qualifyPermission(POST_NOTIFICATIONS)};
-                            postNotificationPermissionRequestCallbackContext = callbackContext;
-                            requestPermissions(plugin, POST_NOTIFICATIONS_PERMISSION_REQUEST_ID, permissions);
-                            sendEmptyPluginResultAndKeepCallback(callbackContext);
-                        }
-                    }
-
-                } catch (Exception e) {
-                    handleExceptionWithContext(e, callbackContext);
-                }
-            }
-        });
-    }
+    // private void grantPermission(final CallbackContext callbackContext) {
+    //     CordovaPlugin plugin = this;
+    //     cordova.getThreadPool().execute(new Runnable() {
+    //         public void run() {
+    //             try {
+    //                 if(Build.VERSION.SDK_INT >= 33){ // Android 13+
+    //                     boolean hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
+    //                     if(!hasRuntimePermission){
+    //                         String[] permissions = new String[]{qualifyPermission(POST_NOTIFICATIONS)};
+    //                         postNotificationPermissionRequestCallbackContext = callbackContext;
+    //                         requestPermissions(plugin, POST_NOTIFICATIONS_PERMISSION_REQUEST_ID, permissions);
+    //                         sendEmptyPluginResultAndKeepCallback(callbackContext);
+    //                     }
+    //                 }
+    //             } catch (Exception e) {
+    //                 handleExceptionWithContext(e, callbackContext);
+    //             }
+    //         }
+    //     });
+    // }
 
     private void subscribe(final CallbackContext callbackContext, final String topic) {
         cordova.getThreadPool().execute(new Runnable() {

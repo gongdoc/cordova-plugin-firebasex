@@ -8,6 +8,8 @@
 
 	<engines>
 		<engine name="cordova" version=">=9" />
+		<engine name="cordova-android" version=">=8" />
+		<engine name="cordova-ios" version=">=5" />
 	</engines>
 
 	<preference name="FIREBASE_ANALYTICS_COLLECTION_ENABLED" default="true" />
@@ -43,6 +45,11 @@
 					<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 				</intent-filter>
 			</service>
+			<service android:name="org.apache.cordova.firebase.FirebasePluginInstanceIDService" android:exported="false">
+				<intent-filter>
+					<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+				</intent-filter>
+			</service>
 			<service android:name="org.apache.cordova.firebase.OverlayService" android:exported="false" />
 			<receiver android:name="org.apache.cordova.firebase.OnNotificationOpenReceiver"/>
 			<activity android:name="org.apache.cordova.firebase.OnNotificationReceiverActivity" android:noHistory="true" android:excludeFromRecents="true" android:taskAffinity="" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:exported="true" />
@@ -74,6 +81,7 @@
 		<source-file src="src/android/FirebasePlugin.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/OnNotificationOpenReceiver.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/OnNotificationReceiverActivity.java" target-dir="src/org/apache/cordova/firebase" />
+		<source-file src="src/android/FirebasePluginInstanceIDService.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/FirebasePluginMessagingService.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/FirebasePluginMessageReceiver.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/FirebasePluginMessageReceiverManager.java" target-dir="src/org/apache/cordova/firebase" />

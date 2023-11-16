@@ -339,6 +339,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
                 Log.d(TAG, "Notification Message showNotification: " + showNotification);
                 showNotification = true;
+                String channelId = this.getStringResource("default_notification_channel_id");
                 sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
 
                 PushWakeLock.releaseWakeLock();

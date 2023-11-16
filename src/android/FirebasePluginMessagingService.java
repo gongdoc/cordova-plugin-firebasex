@@ -210,6 +210,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 flagPush = data.get("flagPush");
                 title = data.get("title");
                 text = data.get("text");
+                body = data.get("text");
                 id = data.get("id");
                 wakeUp = data.get("wakeUp");
                 lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'

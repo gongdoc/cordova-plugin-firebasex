@@ -339,7 +339,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
                 Log.d(TAG, "Notification Message showNotification: " + showNotification);
                 showNotification = true;
-                sendMessage(id, title, text, data, showNotification, lights, vibrate, color, messageType, icon, sound);
+                sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
 
                 PushWakeLock.releaseWakeLock();
             }
@@ -374,20 +374,32 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
     }
                             
-    private void sendMessage(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String lights, String vibrate, String color, String messageType, String icon, String sound) {
+    private void sendMessage(RemoteMessage remoteMessage, Map<String, String> data, String messageType, String id, String title, String body, String bodyHtml, boolean showNotification, String sound, String vibrate, String light, String color, String icon, String channelId, String priority, String visibility, String image, String imageType) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
         }
 
-        // bundle.putString("messageType", messageType);
-        // this.putKVInBundle("id", id, bundle);
-        // this.putKVInBundle("title", title, bundle);
-        // this.putKVInBundle("messageBody", messageBody, bundle);
-        // this.putKVInBundle("vibrate", vibrate, bundle);
-        // this.putKVInBundle("lights", lights, bundle);
-        // this.putKVInBundle("color", color, bundle);
-        // this.putKVInBundle("sound", sound, bundle);
+        bundle.putString("messageType", messageType);
+        this.putKVInBundle("id", id, bundle);
+        this.putKVInBundle("title", title, bundle);
+        this.putKVInBundle("body", body, bundle);
+        this.putKVInBundle("body_html", bodyHtml, bundle);
+        this.putKVInBundle("sound", sound, bundle);
+        this.putKVInBundle("vibrate", vibrate, bundle);
+        this.putKVInBundle("light", light, bundle);
+        this.putKVInBundle("color", color, bundle);
+        this.putKVInBundle("icon", icon, bundle);
+        this.putKVInBundle("channel_id", channelId, bundle);
+        this.putKVInBundle("priority", priority, bundle);
+        this.putKVInBundle("visibility", visibility, bundle);
+        this.putKVInBundle("image", image, bundle);
+        this.putKVInBundle("image_type", imageType, bundle);
+        this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
+        this.putKVInBundle("from", remoteMessage.getFrom(), bundle);
+        this.putKVInBundle("collapse_key", remoteMessage.getCollapseKey(), bundle);
+        this.putKVInBundle("sent_time", String.valueOf(remoteMessage.getSentTime()), bundle);
+        this.putKVInBundle("ttl", String.valueOf(remoteMessage.getTtl()), bundle);
 
         if (showNotification) {
             Intent intent;
@@ -476,7 +488,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     }
                 }
             }
-
 
             // Icon
             int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
@@ -714,7 +725,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         } else {
             bundle.putString("tap", "background");
             bundle.putString("title", title);
-            bundle.putString("body", messageBody);
+            bundle.putString("body", body);
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
         }
     }

@@ -380,14 +380,14 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bundle.putString(key, data.get(key));
         }
 
-        bundle.putString("messageType", messageType);
-        this.putKVInBundle("id", id, bundle);
-        this.putKVInBundle("title", title, bundle);
-        this.putKVInBundle("messageBody", messageBody, bundle);
-        this.putKVInBundle("vibrate", vibrate, bundle);
-        this.putKVInBundle("lights", lights, bundle);
-        this.putKVInBundle("color", color, bundle);
-        this.putKVInBundle("sound", sound, bundle);
+        // bundle.putString("messageType", messageType);
+        // this.putKVInBundle("id", id, bundle);
+        // this.putKVInBundle("title", title, bundle);
+        // this.putKVInBundle("messageBody", messageBody, bundle);
+        // this.putKVInBundle("vibrate", vibrate, bundle);
+        // this.putKVInBundle("lights", lights, bundle);
+        // this.putKVInBundle("color", color, bundle);
+        // this.putKVInBundle("sound", sound, bundle);
 
         if (showNotification) {
             Intent intent;
@@ -451,94 +451,94 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 notificationBuilder.setSmallIcon(getApplicationInfo().icon);
             }
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-                // sound
-                Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
-                notificationBuilder.setSound(soundPath);
+            // if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            //     // sound
+            //     Uri soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
+            //     notificationBuilder.setSound(soundPath);
 
-                // lights
-                if (lights != null) {
-                    try {
-                        String[] lightsComponents = lights.replaceAll("\\s", "").split(",");
-                        if (lightsComponents.length == 3) {
-                            int lightArgb = Color.parseColor(lightsComponents[0]);
-                            int lightOnMs = Integer.parseInt(lightsComponents[1]);
-                            int lightOffMs = Integer.parseInt(lightsComponents[2]);
+            //     // lights
+            //     if (lights != null) {
+            //         try {
+            //             String[] lightsComponents = lights.replaceAll("\\s", "").split(",");
+            //             if (lightsComponents.length == 3) {
+            //                 int lightArgb = Color.parseColor(lightsComponents[0]);
+            //                 int lightOnMs = Integer.parseInt(lightsComponents[1]);
+            //                 int lightOffMs = Integer.parseInt(lightsComponents[2]);
 
-                            notificationBuilder.setLights(lightArgb, lightOnMs, lightOffMs);
-                        }
-                    } catch (Exception e) {
-                        Log.d(TAG, "Lights set failed");
-                    }
-                }
+            //                 notificationBuilder.setLights(lightArgb, lightOnMs, lightOffMs);
+            //             }
+            //         } catch (Exception e) {
+            //             Log.d(TAG, "Lights set failed");
+            //         }
+            //     }
 
-                // Vibrate
-                if (vibrate != null){
-                    try {
-                        String[] sVibrations = vibrate.replaceAll("\\s", "").split(",");
-                        long[] lVibrations = new long[sVibrations.length];
-                        int i=0;
-                        for(String sVibration: sVibrations){
-                            lVibrations[i] = Integer.parseInt(sVibration.trim());
-                            i++;
-                        }
-                        notificationBuilder.setVibrate(lVibrations);
-                        Log.d(TAG, "Vibrate: "+vibrate);
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            }
+            //     // Vibrate
+            //     if (vibrate != null){
+            //         try {
+            //             String[] sVibrations = vibrate.replaceAll("\\s", "").split(",");
+            //             long[] lVibrations = new long[sVibrations.length];
+            //             int i=0;
+            //             for(String sVibration: sVibrations){
+            //                 lVibrations[i] = Integer.parseInt(sVibration.trim());
+            //                 i++;
+            //             }
+            //             notificationBuilder.setVibrate(lVibrations);
+            //             Log.d(TAG, "Vibrate: "+vibrate);
+            //         } catch (Exception e) {
+            //             Log.e(TAG, e.getMessage());
+            //         }
+            //     }
+            // }
 
-            // Color
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                int defaultColor = getResources().getColor(getResources().getIdentifier("accent", "color", getPackageName()), null);
-                if(color != null){
-                    notificationBuilder.setColor(Color.parseColor(color));
-                    Log.d(TAG, "Color: custom="+color);
-                }else{
-                    Log.d(TAG, "Color: default");
-                    notificationBuilder.setColor(defaultColor);
-                }
-            }
+            // // Color
+            // if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            //     int defaultColor = getResources().getColor(getResources().getIdentifier("accent", "color", getPackageName()), null);
+            //     if(color != null){
+            //         notificationBuilder.setColor(Color.parseColor(color));
+            //         Log.d(TAG, "Color: custom="+color);
+            //     }else{
+            //         Log.d(TAG, "Color: default");
+            //         notificationBuilder.setColor(defaultColor);
+            //     }
+            // }
 
-            // Icon
-            int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
-            int customSmallIconResID = 0;
-            if(icon != null){
-                customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
-            }
+            // // Icon
+            // int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
+            // int customSmallIconResID = 0;
+            // if(icon != null){
+            //     customSmallIconResID = getResources().getIdentifier(icon, "drawable", getPackageName());
+            // }
 
-            if (customSmallIconResID != 0) {
-                notificationBuilder.setSmallIcon(customSmallIconResID);
-                Log.d(TAG, "Small icon: custom="+icon);
-            }else if (defaultSmallIconResID != 0) {
-                Log.d(TAG, "Small icon: default="+defaultSmallIconName);
-                notificationBuilder.setSmallIcon(defaultSmallIconResID);
-            } else {
-                Log.d(TAG, "Small icon: application");
-                notificationBuilder.setSmallIcon(getApplicationInfo().icon);
-            }
+            // if (customSmallIconResID != 0) {
+            //     notificationBuilder.setSmallIcon(customSmallIconResID);
+            //     Log.d(TAG, "Small icon: custom="+icon);
+            // }else if (defaultSmallIconResID != 0) {
+            //     Log.d(TAG, "Small icon: default="+defaultSmallIconName);
+            //     notificationBuilder.setSmallIcon(defaultSmallIconResID);
+            // } else {
+            //     Log.d(TAG, "Small icon: application");
+            //     notificationBuilder.setSmallIcon(getApplicationInfo().icon);
+            // }
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                int defaultLargeIconResID = getResources().getIdentifier(defaultLargeIconName, "drawable", getPackageName());
-                int customLargeIconResID = 0;
-                if(icon != null){
-                    customLargeIconResID = getResources().getIdentifier(icon+"_large", "drawable", getPackageName());
-                }
+            // if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            //     int defaultLargeIconResID = getResources().getIdentifier(defaultLargeIconName, "drawable", getPackageName());
+            //     int customLargeIconResID = 0;
+            //     if(icon != null){
+            //         customLargeIconResID = getResources().getIdentifier(icon+"_large", "drawable", getPackageName());
+            //     }
 
-                int largeIconResID;
-                if (customLargeIconResID != 0 || defaultLargeIconResID != 0) {
-                    if (customLargeIconResID != 0) {
-                        largeIconResID = customLargeIconResID;
-                        Log.d(TAG, "Large icon: custom="+icon);
-                    }else{
-                        Log.d(TAG, "Large icon: default="+defaultLargeIconName);
-                        largeIconResID = defaultLargeIconResID;
-                    }
-                    notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), largeIconResID));
-                }
-            }
+            //     int largeIconResID;
+            //     if (customLargeIconResID != 0 || defaultLargeIconResID != 0) {
+            //         if (customLargeIconResID != 0) {
+            //             largeIconResID = customLargeIconResID;
+            //             Log.d(TAG, "Large icon: custom="+icon);
+            //         }else{
+            //             Log.d(TAG, "Large icon: default="+defaultLargeIconName);
+            //             largeIconResID = defaultLargeIconResID;
+            //         }
+            //         notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), largeIconResID));
+            //     }
+            // }
 
             // Build notification
             Notification notification = notificationBuilder.build();

@@ -106,11 +106,11 @@
 		<preference name="ANDROID_GRPC_OKHTTP" default="1.46.0" />
 
 		<framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-		<!-- <framework src="com.google.android.gms:play-services-tagmanager:+" />
+		<framework src="com.google.android.gms:play-services-tagmanager:+" />
 		<framework src="com.google.firebase:firebase-core:+" />
 		<framework src="com.google.firebase:firebase-messaging:+" />
 		<framework src="com.google.firebase:firebase-config:+" />
-		<framework src="com.google.firebase:firebase-perf:+" /> -->
+		<framework src="com.google.firebase:firebase-perf:+" />
 		<framework src="com.google.android.gms:play-services-tagmanager:$ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION" />
 		<framework src="com.google.android.gms:play-services-auth:$ANDROID_PLAY_SERVICES_AUTH_VERSION" />
 		<framework src="com.google.firebase:firebase-analytics:$ANDROID_FIREBASE_ANALYTICS_VERSION" />

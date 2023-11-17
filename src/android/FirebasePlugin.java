@@ -554,30 +554,44 @@ public class FirebasePlugin extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
-                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            try {
-                                if (task.isSuccessful() || task.getException() == null) {
-                                    String currentToken = task.getResult();
-                                    if (currentToken != null) {
-                                        FirebasePlugin.sendToken(currentToken);
-                                    }
-                                }else if(task.getException() != null){
-                                    callbackContext.error(task.getException().getMessage());
-                                }else{
-                                    callbackContext.error("Task failed for unknown reason");
-                                }
-                            } catch (Exception e) {
-                                handleExceptionWithContext(e, callbackContext);
-                            }
-                        };
-                    });
+                    String currentToken = FirebaseInstanceId.getInstance().getToken();
+                    if (currentToken != null) {
+                        FirebasePlugin.sendToken(currentToken);
+                    }
                 } catch (Exception e) {
-                    handleExceptionWithContext(e, callbackContext);
+                    Crashlytics.logException(e);
+                    callbackContext.error(e.getMessage());
                 }
             }
         });
+
+        // cordova.getThreadPool().execute(new Runnable() {
+        //     public void run() {
+        //         try {
+        //             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+        //                 @Override
+        //                 public void onComplete(@NonNull Task<String> task) {
+        //                     try {
+        //                         if (task.isSuccessful() || task.getException() == null) {
+        //                             String currentToken = task.getResult();
+        //                             if (currentToken != null) {
+        //                                 FirebasePlugin.sendToken(currentToken);
+        //                             }
+        //                         }else if(task.getException() != null){
+        //                             callbackContext.error(task.getException().getMessage());
+        //                         }else{
+        //                             callbackContext.error("Task failed for unknown reason");
+        //                         }
+        //                     } catch (Exception e) {
+        //                         handleExceptionWithContext(e, callbackContext);
+        //                     }
+        //                 };
+        //             });
+        //         } catch (Exception e) {
+        //             handleExceptionWithContext(e, callbackContext);
+        //         }
+        //     }
+        // });
     }
 
     public static void sendMessage(Bundle bundle, Context context) {
@@ -649,33 +663,44 @@ public class FirebasePlugin extends CordovaPlugin {
     }
 
 
-    private void getToken(JSONArray args, final CallbackContext callbackContext) {
+    private void getToken(final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
-                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            try {
-                                if (task.isSuccessful() || task.getException() == null) {
-                                    String currentToken = task.getResult();
-                                    callbackContext.success(currentToken);
-                                }else if(task.getException() != null){
-                                    callbackContext.error(task.getException().getMessage());
-                                }else{
-                                    callbackContext.error("Task failed for unknown reason");
-                                }
-                            } catch (Exception e) {
-                                handleExceptionWithContext(e, callbackContext);
-                            }
-                        };
-                    });
-
+                    String token = FirebaseInstanceId.getInstance().getToken();
+                    callbackContext.success(token);
                 } catch (Exception e) {
-                    handleExceptionWithContext(e, callbackContext);
+                    Crashlytics.logException(e);
+                    callbackContext.error(e.getMessage());
                 }
             }
         });
+        // cordova.getThreadPool().execute(new Runnable() {
+        //     public void run() {
+        //         try {
+        //             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+        //                 @Override
+        //                 public void onComplete(@NonNull Task<String> task) {
+        //                     try {
+        //                         if (task.isSuccessful() || task.getException() == null) {
+        //                             String currentToken = task.getResult();
+        //                             callbackContext.success(currentToken);
+        //                         }else if(task.getException() != null){
+        //                             callbackContext.error(task.getException().getMessage());
+        //                         }else{
+        //                             callbackContext.error("Task failed for unknown reason");
+        //                         }
+        //                     } catch (Exception e) {
+        //                         handleExceptionWithContext(e, callbackContext);
+        //                     }
+        //                 };
+        //             });
+
+        //         } catch (Exception e) {
+        //             handleExceptionWithContext(e, callbackContext);
+        //         }
+        //     }
+        // });
     }
 
     private void hasPermission(final CallbackContext callbackContext) {

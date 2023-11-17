@@ -132,6 +132,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -250,7 +252,7 @@ public class FirebasePlugin extends CordovaPlugin {
             if (action.equals("getId")) {
                 this.getInstallationId(args, callbackContext);
             } else if (action.equals("getToken")) {
-                this.getToken(args, callbackContext);
+                this.getToken(callbackContext);
             } else if (action.equals("hasPermission")) {
                 this.hasPermission(callbackContext);
                 return true;
@@ -559,8 +561,7 @@ public class FirebasePlugin extends CordovaPlugin {
                         FirebasePlugin.sendToken(currentToken);
                     }
                 } catch (Exception e) {
-                    Crashlytics.logException(e);
-                    callbackContext.error(e.getMessage());
+                    handleExceptionWithContext(e, callbackContext);
                 }
             }
         });
@@ -670,8 +671,7 @@ public class FirebasePlugin extends CordovaPlugin {
                     String token = FirebaseInstanceId.getInstance().getToken();
                     callbackContext.success(token);
                 } catch (Exception e) {
-                    Crashlytics.logException(e);
-                    callbackContext.error(e.getMessage());
+                    handleExceptionWithContext(e, callbackContext);
                 }
             }
         });

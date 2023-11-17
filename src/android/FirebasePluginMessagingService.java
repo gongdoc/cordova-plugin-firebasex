@@ -337,7 +337,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
                 PushWakeLock.acquireWakeLock(getApplicationContext());
 
-                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
+                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
                 Log.d(TAG, "Notification Message showNotification: " + showNotification);
                 // showNotification = true;
                 channelId = this.getStringResource("default_notification_channel_id");

@@ -28,6 +28,9 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.work.PeriodicWorkRequest;
+
+import kr.co.gongdoc.mobile.TokenDelayWork;
 
 public class OverlayService extends Service {
 
@@ -51,6 +54,10 @@ public class OverlayService extends Service {
     public void onCreate() {
         super.onCreate();
         registerOverlayReceiver();
+
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 10000, TimeUnit.miliseconds)
+            .addTag("Periodic!!!!!!!!!!!!!!!")
+            .build();
     }
 
     @Override

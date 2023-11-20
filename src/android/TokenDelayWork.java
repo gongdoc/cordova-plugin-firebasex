@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.background.workers;
+package kr.co.gongdoc.mobile;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-import static com.example.background.Constants.KEY_IMAGE_URI;
 
 public class TokenDelayWork extends Worker {
 
@@ -47,18 +46,10 @@ public class TokenDelayWork extends Worker {
     @Override
     public Worker.Result doWork() {
 
-        Context applicationContext = getApplicationContext();
-
-        // Makes a notification when the work starts and slows down the work so that it's easier to
-        // see each WorkRequest start, even on emulated devices
-        WorkerUtils.makeStatusNotification("Blurring image", applicationContext);
-        WorkerUtils.sleep();
-        String resourceUri = getInputData().getString(KEY_IMAGE_URI);
-
         try {
             int i=0;            
             i++;
-            Log.e(TAG, "Invalid input uri" + i);
+            Log.d(TAG, "Notification Message 카운트: " + i);
 
             // If there were no errors, return SUCCESS
             return Result.success(outputData);

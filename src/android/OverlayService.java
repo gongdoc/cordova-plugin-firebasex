@@ -30,8 +30,6 @@ import android.widget.TextView;
 
 import androidx.work.PeriodicWorkRequest;
 
-import kr.co.gongdoc.mobile.TokenDelayWork;
-
 public class OverlayService extends Service {
 
     private static final String TAG = OverlayService.class.getSimpleName();

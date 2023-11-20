@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package kr.co.gongdoc.mobile;
+package org.apache.cordova.firebase;
 
 import android.content.ContentResolver;
 import android.content.Context;

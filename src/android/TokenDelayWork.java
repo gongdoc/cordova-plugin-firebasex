@@ -45,6 +45,7 @@ public class TokenDelayWork extends Worker {
             int i=0;            
             i++;
             Log.d(TAG, "Notification Message 카운트: " + i);
+            return i;
         } catch (Throwable throwable) {
 
             // Technically WorkManager will return Result.failure()

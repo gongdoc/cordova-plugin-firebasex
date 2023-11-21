@@ -18,9 +18,6 @@ package org.apache.cordova.firebase;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -29,7 +26,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 public class TokenDelayWork extends Worker {
-
+    private static final String TAG = OverlayService.class.getSimpleName();
     /**
      * Creates an instance of the {@link Worker}.
      *
@@ -48,16 +45,12 @@ public class TokenDelayWork extends Worker {
             int i=0;            
             i++;
             Log.d(TAG, "Notification Message 카운트: " + i);
-            String outputData = "success";
-            // If there were no errors, return SUCCESS
-            return Result.success(outputData);
         } catch (Throwable throwable) {
 
             // Technically WorkManager will return Result.failure()
             // but it's best to be explicit about it.
             // Thus if there were errors, we're return FAILURE
             Log.e(TAG, "Error applying blur", throwable);
-            return Result.failure();
         }
     }
 }

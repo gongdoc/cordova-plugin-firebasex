@@ -40,8 +40,6 @@ public class TokenDelayWork extends Worker {
         super(appContext, workerParams);
     }
 
-    private static final String TAG = BlurWorker.class.getSimpleName();
-
     @NonNull
     @Override
     public Worker.Result doWork() {
@@ -50,7 +48,7 @@ public class TokenDelayWork extends Worker {
             int i=0;            
             i++;
             Log.d(TAG, "Notification Message 카운트: " + i);
-
+            String outputData = "success";
             // If there were no errors, return SUCCESS
             return Result.success(outputData);
         } catch (Throwable throwable) {

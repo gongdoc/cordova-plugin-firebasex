@@ -28,7 +28,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.work.PeriodicWorkRequestBuilder;
+import androidx.work.WorkRequest;
+import androidx.work.PeriodicWorkRequest.Builder;
 import android.icu.util.TimeUnit;
 
 public class OverlayService extends Service {
@@ -54,9 +55,7 @@ public class OverlayService extends Service {
         super.onCreate();
         registerOverlayReceiver();
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequestBuilder<TokenDelayWork>(5, TimeUnit.MINUTES)
-            .addTag("Periodic!!!!!!!!!!!!!!!")
-            .build();
+        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 30, TimeUnit.MINUTES, 10, TimeUnit.MINUTES).build();
     }
 
     @Override

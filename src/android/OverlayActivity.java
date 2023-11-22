@@ -42,7 +42,7 @@ public class OverlayActivity extends Activity {
             exit();
             return;
         }
-
+        Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");
         PushWakeLock.acquireWakeLock(getApplicationContext());
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -56,7 +56,7 @@ public class OverlayService extends Service {
     public void onCreate() {
         super.onCreate();
         registerOverlayReceiver();
-
+        Log.d(TAG, "Notification Message OVER S!!!! OVER S!!!");
         WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES, 1, TimeUnit.MINUTES).build();
     }
 

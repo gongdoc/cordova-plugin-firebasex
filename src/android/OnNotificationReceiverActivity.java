@@ -12,7 +12,7 @@ public class OnNotificationReceiverActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(FirebasePlugin.TAG, "OnNotificationReceiverActivity.onCreate()");
-        Log.d(TAG, "Notification Message OoNoti R!!!! OoNoti R!!!");
+        Log.d(FirebasePlugin.TAG, "Notification Message OoNoti R!!!! OoNoti R!!!");
         handleNotification(this, getIntent());
         finish();
     }

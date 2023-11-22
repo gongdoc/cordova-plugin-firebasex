@@ -27,12 +27,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.work.WorkRequest;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.PeriodicWorkRequest.Builder;
-// import android.icu.util.TimeUnit;
-import java.util.concurrent.TimeUnit;
 	
 public class OverlayService extends Service {
 
@@ -57,7 +51,7 @@ public class OverlayService extends Service {
         super.onCreate();
         registerOverlayReceiver();
         Log.d(TAG, "Notification Message OVER S!!!! OVER S!!!");
-        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES, 1, TimeUnit.MINUTES).build();
+        
     }
 
     @Override

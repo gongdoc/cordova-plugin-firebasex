@@ -26,6 +26,11 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.work.WorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.PeriodicWorkRequest.Builder;
+import java.util.concurrent.TimeUnit;
+
 public class OverlayActivity extends Activity {
 
     private static final String TAG = "FirebasePlugin";
@@ -42,6 +47,7 @@ public class OverlayActivity extends Activity {
             exit();
             return;
         }
+        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES, 1, TimeUnit.MINUTES).build();
         Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");
         PushWakeLock.acquireWakeLock(getApplicationContext());
 

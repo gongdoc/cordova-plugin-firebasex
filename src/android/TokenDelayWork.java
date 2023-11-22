@@ -45,13 +45,14 @@ public class TokenDelayWork extends Worker {
             int i=0;            
             i++;
             Log.d(TAG, "Notification Message 카운트: " + i);
-            return i;
+            return Worker.Result.success();
         } catch (Throwable throwable) {
 
             // Technically WorkManager will return Result.failure()
             // but it's best to be explicit about it.
             // Thus if there were errors, we're return FAILURE
             Log.e(TAG, "Error applying blur", throwable);
+            return Worker.Result.failure();
         }
     }
 }

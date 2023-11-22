@@ -57,7 +57,7 @@ public class OverlayService extends Service {
         super.onCreate();
         registerOverlayReceiver();
 
-        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 30, TimeUnit.MINUTES, 10, TimeUnit.MINUTES).build();
+        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES, 1, TimeUnit.MINUTES).build();
     }
 
     @Override

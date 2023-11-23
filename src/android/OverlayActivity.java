@@ -38,7 +38,7 @@ public class OverlayActivity extends Activity {
     private int CLICK_TIME_THRESHOLD = 200;
 
     @SuppressLint("ClickableViewAccessibility")
-    @Override
+    @Override 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -47,7 +47,8 @@ public class OverlayActivity extends Activity {
             exit();
             return;
         }
-        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES, 1, TimeUnit.MINUTES).build();
+
+        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 10, TimeUnit.MINUTES, 5, TimeUnit.MINUTES).build();
         Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");
         PushWakeLock.acquireWakeLock(getApplicationContext());
 

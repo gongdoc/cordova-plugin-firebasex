@@ -26,7 +26,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 public class TokenDelayWork extends Worker {
-    private static final String TAG = OverlayService.class.getSimpleName();
+    protected static final String TAG = "FirebasePlugin";;
     /**
      * Creates an instance of the {@link Worker}.
      *

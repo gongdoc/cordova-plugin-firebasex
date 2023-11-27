@@ -48,7 +48,7 @@ public class OverlayActivity extends Activity {
             return;
         }
 
-        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 10, TimeUnit.MINUTES, 5, TimeUnit.MINUTES).build();
+        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
         Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");
         PushWakeLock.acquireWakeLock(getApplicationContext());
 

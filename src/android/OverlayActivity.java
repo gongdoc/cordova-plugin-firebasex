@@ -52,8 +52,7 @@ public class OverlayActivity extends Activity {
 
         //////////////
         WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
-        workManager = workManager.getInstance(savedInstanceState);
-        workManager.enqueue(periodicWorkRequest);
+        workManager = workManager.getInstance(this).enqueue(periodicWorkRequest);
         ////////////
 
         Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");

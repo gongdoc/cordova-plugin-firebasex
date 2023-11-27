@@ -51,8 +51,7 @@ public class OverlayActivity extends Activity {
         }
 
         //////////////
-        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES)
-        .addTag('@@@@@@@@@@@@@@@@@@@@@@').build();
+        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
         workManager = getWorkManager();
         if (workManager == null) {
             throw new JobProxyIllegalStateException("WorkManager is null");

@@ -50,8 +50,15 @@ public class OverlayActivity extends Activity {
             return;
         }
 
-        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
+        //////////////
+        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES)
+        .addTag('@@@@@@@@@@@@@@@@@@@@@@').build();
+        workManager = getWorkManager();
+        if (workManager == null) {
+            throw new JobProxyIllegalStateException("WorkManager is null");
+        }
         workManager.enqueue(periodicWorkRequest);
+        ////////////
 
         Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");
         PushWakeLock.acquireWakeLock(getApplicationContext());

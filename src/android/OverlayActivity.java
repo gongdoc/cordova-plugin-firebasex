@@ -30,10 +30,12 @@ import androidx.work.WorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.PeriodicWorkRequest.Builder;
 import java.util.concurrent.TimeUnit;
+import androidx.work.WorkManager;
 
 public class OverlayActivity extends Activity {
 
     private static final String TAG = "FirebasePlugin";
+    private WorkManager workManager;
 
     private int CLICK_TIME_THRESHOLD = 200;
 
@@ -49,6 +51,8 @@ public class OverlayActivity extends Activity {
         }
 
         WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
+        workManager.enqueue(periodicWorkRequest);
+
         Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");
         PushWakeLock.acquireWakeLock(getApplicationContext());
 

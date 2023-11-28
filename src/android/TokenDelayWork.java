@@ -41,7 +41,7 @@ public class TokenDelayWork extends Worker {
 
     @NonNull
     @Override
-    public Worker.Result doWork() {
+    public Result doWork() {
 
         Data inputData = getInputData();
         int number = inputData.getInt("number", -1);

@@ -63,10 +63,10 @@ public class OverlayActivity extends Activity {
                 .setRequiresCharging(true)
                 .build();
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class)
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 5, TimeUnit.MINUTES)
                 .setInputData(data)
-                // .setConstraints(constraints)
-                // .setInitialDelay(3, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .setInitialDelay(8, TimeUnit.MINUTES)
                 .addTag("PRDW")
                 .build();
 

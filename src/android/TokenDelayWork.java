@@ -41,14 +41,14 @@ public class TokenDelayWork extends Worker {
 
     @NonNull
     @Override
-    public Result doWork() {
+    public Worker.Result doWork() {
 
         Data inputData = getInputData();
         int number = inputData.getInt("number", -1);
         Log.d(TAG, "doWork(): number: " + number);
 
         for (int i = number; i > 0; i--){
-            Log.d(TAG, "Notification Message count: " + i);
+            Log.d(TAG, "Notification Message 카운트: " + i);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

@@ -72,6 +72,16 @@ public class OverlayActivity extends Activity {
 
         WorkManager.getInstance(this).enqueue(periodicWorkRequest);
 
+        WorkManager.getInstance(this).getWorkInfosByTagLiveData("PRDW").observe(this,
+        new Observer<List<WorkInfo>>() {
+            @Override
+            public void onChanged(List<WorkInfo> workInfos) {
+                for (WorkInfo w: workInfos){
+                    Log.d(TAG, "onCreate(): Work Status: " + w.getState());
+                }
+            }
+        });
+
         // WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
         // workManager = workManager.getInstance(this).enqueue(periodicWorkRequest);
         ////////////

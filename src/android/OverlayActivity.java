@@ -31,6 +31,9 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.PeriodicWorkRequest.Builder;
 import java.util.concurrent.TimeUnit;
 import androidx.work.WorkManager;
+import androidx.work.NetworkType;
+import androidx.work.Constraints;
+import androidx.work.Constraints.Builder;
 
 public class OverlayActivity extends Activity {
 
@@ -51,8 +54,27 @@ public class OverlayActivity extends Activity {
         }
 
         //////////////
-        WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
-        workManager = workManager.getInstance(this).enqueue(periodicWorkRequest);
+
+        Data data = new Data.Builder()
+                .putInt("number", 10)
+                .build();
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresCharging(true)
+                .build();
+
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 7, TimeUnit.MINUTES)
+                .setInputData(data)
+                .setConstraints(constraints)
+                .setInitialDelay(10, TimeUnit.MINUTES)
+                .addTag("Periodic")
+                .build();
+
+        workManager.getInstance(this).enqueue(periodicWorkRequest);
+
+        // WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
+        // workManager = workManager.getInstance(this).enqueue(periodicWorkRequest);
         ////////////
 
         Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");

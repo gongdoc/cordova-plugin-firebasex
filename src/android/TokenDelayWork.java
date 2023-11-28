@@ -38,23 +38,30 @@ public class TokenDelayWork extends Worker {
     }
 
     private static final String TAG = TokenDelayWork.class.getSimpleName();
-    
+
     @NonNull
     @Override
     public Worker.Result doWork() {
 
-        try {
-            int i=0;            
-            i++;
-            Log.d(TAG, "Notification Message 카운트: " + i);
-            return Worker.Result.success();
-        } catch (Throwable throwable) {
+        Data inputData = getInputData();
+        int number = inputData.getInt("number", -1);
+        Log.d(TAG, "doWork(): number: " + number);
 
-            // Technically WorkManager will return Result.failure()
-            // but it's best to be explicit about it.
-            // Thus if there were errors, we're return FAILURE
-            Log.e(TAG, "Error applying blur", throwable);
-            return Worker.Result.failure();
+        for (int i = number; i > 0; i--){
+            Log.d(TAG, "Notification Message 카운트: " + i);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Result.failure();
+            }
+            //return Result.retry();
         }
+
+        Data outPutData = new Data.Builder()
+                .putInt("number", 15)
+                .build();
+
+        return Result.success(outPutData);
     }
 }

@@ -63,24 +63,14 @@ public class OverlayActivity extends Activity {
                 .setRequiresCharging(true)
                 .build();
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 5, TimeUnit.MINUTES)
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class)
                 .setInputData(data)
-                .setConstraints(constraints)
-                .setInitialDelay(3, TimeUnit.MINUTES)
+                // .setConstraints(constraints)
+                // .setInitialDelay(3, TimeUnit.MINUTES)
                 .addTag("PRDW")
                 .build();
 
         WorkManager.getInstance(this).enqueue(periodicWorkRequest);
-
-        WorkManager.getInstance(this).getWorkInfosByTagLiveData("PRDW").observe(this,
-        new Observer<List<WorkInfo>>() {
-            @Override
-            public void onChanged(List<WorkInfo> workInfos) {
-                for (WorkInfo w: workInfos){
-                    Log.d(TAG, "onCreate(): Work Status: " + w.getState());
-                }
-            }
-        });
 
         // WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
         // workManager = workManager.getInstance(this).enqueue(periodicWorkRequest);

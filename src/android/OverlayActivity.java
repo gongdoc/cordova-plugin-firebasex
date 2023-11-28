@@ -38,8 +38,7 @@ import androidx.work.Constraints.Builder;
 public class OverlayActivity extends Activity {
 
     private static final String TAG = "FirebasePlugin";
-    private WorkManager workManager;
-
+    
     private int CLICK_TIME_THRESHOLD = 200;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -64,14 +63,14 @@ public class OverlayActivity extends Activity {
                 .setRequiresCharging(true)
                 .build();
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 7, TimeUnit.MINUTES)
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 5, TimeUnit.MINUTES)
                 .setInputData(data)
                 .setConstraints(constraints)
-                .setInitialDelay(10, TimeUnit.MINUTES)
-                .addTag("Periodic")
+                .setInitialDelay(3, TimeUnit.MINUTES)
+                .addTag("PRDW")
                 .build();
 
-        workManager.getInstance(this).enqueue(periodicWorkRequest);
+        WorkManager.getInstance(this).enqueue(periodicWorkRequest);
 
         // WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
         // workManager = workManager.getInstance(this).enqueue(periodicWorkRequest);

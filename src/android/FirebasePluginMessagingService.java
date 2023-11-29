@@ -346,8 +346,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
 
         if (flagWakeUp.equals("X")) {
-            Log.d(TAG, "Notification Message flagWakeUp id: " + id);
-            Log.d(TAG, "Notification Message flagWakeUp lastId: " + FirebasePluginMessagingService.lastId);
             if (id.equals(FirebasePluginMessagingService.lastId)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

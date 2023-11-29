@@ -276,7 +276,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 bundle.putString("screen", "off");
             }
 
-            if (flagWakeUp.equals("Y")) intent.putExtras(bundle);
+            intent.putExtras(bundle);
 
             if (flagPush.equals("N")) {
                 try {
@@ -327,7 +327,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 }
             }
 
-            startActivity(intent);
+            if (flagWakeUp.equals("Y")) startActivity(intent);
 
             // save id
             FirebasePluginMessagingService.lastId = id;

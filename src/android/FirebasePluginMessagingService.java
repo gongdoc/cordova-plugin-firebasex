@@ -252,7 +252,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         // TODO: Add option to developer to configure if show notification when app on foreground
         Context context = this.getApplicationContext();
 
-        if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
+        if (wakeUp != null && wakeUp.equals("Y")) {
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
@@ -276,7 +276,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 bundle.putString("screen", "off");
             }
 
-            intent.putExtras(bundle);
+            if (flagWakeUp.equals("Y")) intent.putExtras(bundle);
 
             if (flagPush.equals("N")) {
                 try {

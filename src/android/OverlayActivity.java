@@ -46,12 +46,6 @@ public class OverlayActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Bundle bundle = getIntent().getExtras();
-        if (bundle.getString("flagWakeUp").equals("X")) {
-            exit();
-            return;
-        }
-
         //////////////
 
         Data data = new Data.Builder()
@@ -72,11 +66,15 @@ public class OverlayActivity extends Activity {
 
         WorkManager.getInstance(this).enqueue(periodicWorkRequest);
 
-        // WorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 3, TimeUnit.MINUTES).build();
-        // workManager = workManager.getInstance(this).enqueue(periodicWorkRequest);
         ////////////
+        
+        final Bundle bundle = getIntent().getExtras();
+        if (bundle.getString("flagWakeUp").equals("X")) {
+            exit();
+            return;
+        }
 
-        Log.d(TAG, "Notification Message OVER A!!!! OVER A!!!");
+        Log.d(TAG, "Notification Message OVER A!!!! OVER A!!! flagWakeUp =  " + bundle.getString("flagWakeUp"));
         PushWakeLock.acquireWakeLock(getApplicationContext());
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);

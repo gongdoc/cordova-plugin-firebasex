@@ -107,14 +107,14 @@ public class OverlayActivity extends Activity {
         textBg.setText("알림창 외에 터치하시면\n사라집니다.");
 
         int dialogId = getResources().getIdentifier("dialog", "id", getPackageName());
-        int backgroundId = getResources().getIdentifier("background", "id", getPackageName());
+        // int backgroundId = getResources().getIdentifier("background", "id", getPackageName());
         RelativeLayout dialog = view.findViewById(dialogId);
-        RelativeLayout backLayOut = view.findViewById(backgroundId);
+        // RelativeLayout backLayOut = view.findViewById(backgroundId);
 
         dialog.setFocusableInTouchMode(true);
 
-        if (bundle.getString("flagWakeUp").equals("N")) backLayOut.setVisibility(view.INVISIBLE);
-        else backLayOut.setVisibility(view.VISIBLE);
+        // if (bundle.getString("flagWakeUp").equals("N")) backLayOut.setVisibility(view.INVISIBLE);
+        // else backLayOut.setVisibility(view.VISIBLE);
 
         dialog.requestFocus();
         dialog.setOnKeyListener(new View.OnKeyListener() {
@@ -219,6 +219,8 @@ public class OverlayActivity extends Activity {
         webSettings.setDomStorageEnabled(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
         webSettings.setTextZoom(100);
+
+        if (bundle.getString("flagWakeUp").equals("N")) webViewData = "";
 
         contentText.loadDataWithBaseURL("file:///android_res/", webViewData, "text/html", "UTF-8", null);
 

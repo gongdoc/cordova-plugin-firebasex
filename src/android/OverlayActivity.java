@@ -215,8 +215,6 @@ public class OverlayActivity extends Activity {
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
         webSettings.setTextZoom(100);
 
-        if (bundle.getString("flagWakeUp").equals("N")) webViewData = "";
-
         contentText.loadDataWithBaseURL("file:///android_res/", webViewData, "text/html", "UTF-8", null);
 
         contentText.setOnTouchListener(new View.OnTouchListener() {

@@ -110,6 +110,7 @@ public class OverlayActivity extends Activity {
         RelativeLayout dialog = view.findViewById(dialogId);
 
         dialog.setFocusableInTouchMode(true);
+
         dialog.requestFocus();
         dialog.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -122,6 +123,9 @@ public class OverlayActivity extends Activity {
                 }
             }
         });
+
+        if (bundle.getString("flagWakeUp").equals("N")) dialog.setVisibility(view.INVISIBLE);
+        else dialog.setVisibility(view.VISIBLE);
 
         int titleId = getResources().getIdentifier("textTitle", "id", getPackageName());
         final TextView titleText = view.findViewById(titleId);

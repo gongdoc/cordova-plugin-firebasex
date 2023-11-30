@@ -107,8 +107,9 @@ public class OverlayActivity extends Activity {
         textBg.setText("알림창 외에 터치하시면\n사라집니다.");
 
         int dialogId = getResources().getIdentifier("dialog", "id", getPackageName());
+        int backgroundId = getResources().getIdentifier("background", "id", getPackageName());
         RelativeLayout dialog = view.findViewById(dialogId);
-        RelativeLayout backLayOut = view.findViewById(background);
+        RelativeLayout backLayOut = view.findViewById(backgroundId);
 
         dialog.setFocusableInTouchMode(true);
 

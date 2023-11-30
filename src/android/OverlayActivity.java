@@ -108,11 +108,12 @@ public class OverlayActivity extends Activity {
 
         int dialogId = getResources().getIdentifier("dialog", "id", getPackageName());
         RelativeLayout dialog = view.findViewById(dialogId);
+        RelativeLayout backLayOut = view.findViewById(background);
 
         dialog.setFocusableInTouchMode(true);
 
-        if (bundle.getString("flagWakeUp").equals("N")) dialog.setVisibility(view.INVISIBLE);
-        else dialog.setVisibility(view.VISIBLE);
+        if (bundle.getString("flagWakeUp").equals("N")) backLayOut.setVisibility(view.INVISIBLE);
+        else backLayOut.setVisibility(view.VISIBLE);
 
         dialog.requestFocus();
         dialog.setOnKeyListener(new View.OnKeyListener() {

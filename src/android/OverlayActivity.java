@@ -111,6 +111,9 @@ public class OverlayActivity extends Activity {
 
         dialog.setFocusableInTouchMode(true);
 
+        if (bundle.getString("flagWakeUp").equals("N")) dialog.setVisibility(view.INVISIBLE);
+        else dialog.setVisibility(view.VISIBLE);
+
         dialog.requestFocus();
         dialog.setOnKeyListener(new View.OnKeyListener() {
             @Override

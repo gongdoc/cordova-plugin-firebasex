@@ -327,7 +327,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 }
             }
 
-            if (flagWakeUp.equals("Y")) startActivity(intent);
+            startActivity(intent);
 
             // save id
             FirebasePluginMessagingService.lastId = id;

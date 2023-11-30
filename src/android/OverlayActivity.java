@@ -159,9 +159,10 @@ public class OverlayActivity extends Activity {
             }
         });
 
+        String visibleStr = bundle.getString("flagWakeUp").equals("N") ? "display:none" : ""; 
 
         String webViewStyle = "@font-face { font-family:noto_sans;src:url('font/noto_sans_kr_regular.otf'); }\n"
-                + "body { padding:10px;font-family:noto_sans, sans-serif;font-size:16px; }"
+                + "body { padding:10px;font-family:noto_sans, sans-serif;font-size:16px;" + visibleStr + "}"
                 + "h3 { margin:0;margin-bottom:10px;font-size:1.5em; }\n"
                 + "ul { margin:0;padding:0 0 0 5px;list-style:none; }\n"
                 + "li { padding-left:20px;color:#000;font-size:1.2em;line-height:1.5;background:url('drawable/ic_bullet_triangle.png') no-repeat 0 5px;background-size:20px; }\n";

@@ -69,7 +69,7 @@ public class OverlayActivity extends Activity {
         ////////////
         
         final Bundle bundle = getIntent().getExtras();
-        if (bundle.getString("flagWakeUp").equals("X") || bundle.getString("flagWakeUp").equals("N")) {
+        if (bundle.getString("flagWakeUp").equals("X")) {
             exit();
             return;
         }

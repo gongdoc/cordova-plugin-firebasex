@@ -124,9 +124,6 @@ public class OverlayActivity extends Activity {
             }
         });
 
-        if (bundle.getString("flagWakeUp").equals("N")) dialog.setVisibility(view.INVISIBLE);
-        else dialog.setVisibility(view.VISIBLE);
-
         int titleId = getResources().getIdentifier("textTitle", "id", getPackageName());
         final TextView titleText = view.findViewById(titleId);
         titleText.setText(bundle.getString("workAddress"));
@@ -218,6 +215,8 @@ public class OverlayActivity extends Activity {
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
         webSettings.setTextZoom(100);
 
+        if (bundle.getString("flagWakeUp").equals("N")) webViewData = "";
+
         contentText.loadDataWithBaseURL("file:///android_res/", webViewData, "text/html", "UTF-8", null);
 
         contentText.setOnTouchListener(new View.OnTouchListener() {
@@ -282,7 +281,6 @@ public class OverlayActivity extends Activity {
                 return false;
             }
         });
-
 
         int cancelId = getResources().getIdentifier("buttonCancel", "id", getPackageName());
         ImageButton buttonCancel = view.findViewById(cancelId);

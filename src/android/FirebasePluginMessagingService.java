@@ -258,24 +258,24 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         boolean showNotification2 = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
         if (!showNotification2) return;
 
-        Intent intent2 = new Intent();
-        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent2.setClass(context, OverlayActivity.class);
+        Intent intentOrigin = new Intent();
+        intentOrigin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intentOrigin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentOrigin.setClass(context, OverlayActivity.class);
 
-        Bundle bundle2 = new Bundle();
+        Bundle bundleOrigin = new Bundle();
         for (Map.Entry<String, String> entry : data.entrySet()) {
-            bundle2.putString(entry.getKey(), entry.getValue());
+            bundleOrigin.putString(entry.getKey(), entry.getValue());
         }
 
         PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
         if (powerManager != null && powerManager.isInteractive()) {
-            bundle2.putString("screen", "on");
+            bundleOrigin.putString("screen", "on");
         } else {
-            bundle2.putString("screen", "off");
+            bundleOrigin.putString("screen", "off");
         }
 
-        intent2.putExtras(bundle2);
+        intentOrigin.putExtras(bundleOrigin);
 
         if (flagPush.equals("N")) {
             try {
@@ -327,7 +327,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
 
         if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
-            startActivity(intent2);
+            startActivity(intentOrigin);
             // save id
             FirebasePluginMessagingService.lastId = id;
         }
@@ -344,7 +344,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             //PushWakeLock.releaseWakeLock();
         }
 
-        if (flagWakeUp.equals("X") && FirebasePluginMessagingService.lastId !== "") {
+        if (flagWakeUp.equals("X") && !FirebasePluginMessagingService.lastId.equals("")) {
             if (id.equals(FirebasePluginMessagingService.lastId)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

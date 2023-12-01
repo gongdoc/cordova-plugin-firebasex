@@ -255,27 +255,27 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
-        boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-        if (!showNotification) return;
+        boolean showNotification2 = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+        if (!showNotification2) return;
 
-        Intent intent = new Intent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setClass(context, OverlayActivity.class);
+        Intent intent2 = new Intent();
+        intent2.setFlags(Intent2.FLAG_ACTIVITY_NEW_TASK);
+        intent2.addFlags(Intent2.FLAG_ACTIVITY_CLEAR_TOP);
+        intent2.setClass(context, OverlayActivity.class);
 
-        Bundle bundle = new Bundle();
+        Bundle bundle2 = new Bundle();
         for (Map.Entry<String, String> entry : data.entrySet()) {
-            bundle.putString(entry.getKey(), entry.getValue());
+            bundle2.putString(entry.getKey(), entry.getValue());
         }
 
         PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
         if (powerManager != null && powerManager.isInteractive()) {
-            bundle.putString("screen", "on");
+            bundle2.putString("screen", "on");
         } else {
-            bundle.putString("screen", "off");
+            bundle2.putString("screen", "off");
         }
 
-        intent.putExtras(bundle);
+        intent2.putExtras(bundle2);
 
         if (flagPush.equals("N")) {
             try {
@@ -327,7 +327,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
 
         if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
-            startActivity(intent);
+            startActivity(intent2);
             // save id
             FirebasePluginMessagingService.lastId = id;
         }

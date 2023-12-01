@@ -252,32 +252,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             // TODO: Add option to developer to configure if show notification when app on foreground
             Context context = this.getApplicationContext();
 
-            if (flagWakeUp.equals("X")) {
-                if (id.equals(FirebasePluginMessagingService.lastId)) {
-                    Intent intent = new Intent();
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.setClass(context, OverlayActivity.class);
-
-                    Bundle bundle = new Bundle();
-                    for (Map.Entry<String, String> entry : data.entrySet()) {
-                        bundle.putString(entry.getKey(), entry.getValue());
-                    }
-                    intent.putExtras(bundle);
-
-                    startActivity(intent);
-
-                    FirebasePluginMessagingService.lastId = "";
-                }
-
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                if (notificationManager != null) {
-                    notificationManager.cancel(id.hashCode());
-                }
-
-                return;
-            }
-
             if (wakeUp != null && wakeUp.equals("Y")) {
                 NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
                 if (!notificationManagerCompat.areNotificationsEnabled()) return;
@@ -304,54 +278,54 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 intent.putExtras(bundle);
 
-                if (flagPush.equals("N")) {
-                    try {
-                        final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                        if (audioManager != null) {
-                            int ringerMode = audioManager.getRingerMode();
-                            if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                                Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
-                                if (sound != null) {
-                                    soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
-                                }
+                // if (flagPush.equals("N")) {
+                //     try {
+                //         final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+                //         if (audioManager != null) {
+                //             int ringerMode = audioManager.getRingerMode();
+                //             if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                //                 Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
+                //                 if (sound != null) {
+                //                     soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
+                //                 }
 
-                                final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                                final int volumeMusic = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                                int maxVolumeNotification = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-                                int volumeNotification = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+                //                 final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                //                 final int volumeMusic = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                //                 int maxVolumeNotification = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+                //                 int volumeNotification = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
 
-                                int volume = volumeNotification * maxVolumeMusic / maxVolumeNotification;
-                                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+                //                 int volume = volumeNotification * maxVolumeMusic / maxVolumeNotification;
+                //                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
 
-                                final MediaPlayer mediaPlayer = new MediaPlayer();
-                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                                mediaPlayer.setDataSource(getApplicationContext(), soundPath);
-                                mediaPlayer.prepare();
-                                mediaPlayer.start();
-                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                    public void onCompletion(MediaPlayer mp) {
-                                        mediaPlayer.release();
-                                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMusic, 0);
-                                    }
-                                });
-                            }
+                //                 final MediaPlayer mediaPlayer = new MediaPlayer();
+                //                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                //                 mediaPlayer.setDataSource(getApplicationContext(), soundPath);
+                //                 mediaPlayer.prepare();
+                //                 mediaPlayer.start();
+                //                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                //                     public void onCompletion(MediaPlayer mp) {
+                //                         mediaPlayer.release();
+                //                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMusic, 0);
+                //                     }
+                //                 });
+                //             }
 
-                            if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-                                long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
-                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                if (vibrator != null && vibrator.hasVibrator()) {
-                                    if (android.os.Build.VERSION.SDK_INT >= 26) {
-                                        vibrator.vibrate(VibrationEffect.createWaveform(defaultVibration, -1));
-                                    } else {
-                                        vibrator.vibrate(defaultVibration, -1);
-                                    }
-                                }
-                            }
-                        }
-                    } catch (Exception ex) {
-                        Log.d(TAG, "Sound file load failed");
-                    }
-                }
+                //             if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+                //                 long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
+                //                 Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                //                 if (vibrator != null && vibrator.hasVibrator()) {
+                //                     if (android.os.Build.VERSION.SDK_INT >= 26) {
+                //                         vibrator.vibrate(VibrationEffect.createWaveform(defaultVibration, -1));
+                //                     } else {
+                //                         vibrator.vibrate(defaultVibration, -1);
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     } catch (Exception ex) {
+                //         Log.d(TAG, "Sound file load failed");
+                //     }
+                // }
 
                 startActivity(intent);
 
@@ -371,9 +345,33 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 PushWakeLock.releaseWakeLock();
             }
 
-            
+            if (flagWakeUp.equals("X")) {
+                if (id.equals(FirebasePluginMessagingService.lastId)) {
+                    Intent intent = new Intent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setClass(context, OverlayActivity.class);
 
-        }catch (Exception e){
+                    Bundle bundle = new Bundle();
+                    for (Map.Entry<String, String> entry : data.entrySet()) {
+                        bundle.putString(entry.getKey(), entry.getValue());
+                    }
+                    intent.putExtras(bundle);
+
+                    startActivity(intent);
+
+                    FirebasePluginMessagingService.lastId = "";
+                }
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null) {
+                    notificationManager.cancel(id.hashCode());
+                }
+
+                return;
+            }
+
+        } catch (Exception e){
             FirebasePlugin.handleExceptionWithoutContext(e);
             return;
         }

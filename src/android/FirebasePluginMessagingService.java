@@ -253,30 +253,30 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Context context = this.getApplicationContext();
 
             if (wakeUp != null && wakeUp.equals("Y")) {
-                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-                if (!notificationManagerCompat.areNotificationsEnabled()) return;
+                // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                // if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
-                boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                if (!showNotification) return;
+                // boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+                // if (!showNotification) return;
 
-                Intent intent = new Intent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.setClass(context, OverlayActivity.class);
+                // Intent intent = new Intent();
+                // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                // intent.setClass(context, OverlayActivity.class);
 
-                Bundle bundle = new Bundle();
-                for (Map.Entry<String, String> entry : data.entrySet()) {
-                    bundle.putString(entry.getKey(), entry.getValue());
-                }
+                // Bundle bundle = new Bundle();
+                // for (Map.Entry<String, String> entry : data.entrySet()) {
+                //     bundle.putString(entry.getKey(), entry.getValue());
+                // }
 
-                PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
-                if (powerManager != null && powerManager.isInteractive()) {
-                    bundle.putString("screen", "on");
-                } else {
-                    bundle.putString("screen", "off");
-                }
+                // PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
+                // if (powerManager != null && powerManager.isInteractive()) {
+                //     bundle.putString("screen", "on");
+                // } else {
+                //     bundle.putString("screen", "off");
+                // }
 
-                intent.putExtras(bundle);
+                // intent.putExtras(bundle);
 
                 // if (flagPush.equals("N")) {
                 //     try {
@@ -327,10 +327,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 //     }
                 // }
 
-                startActivity(intent);
+                // startActivity(intent);
 
-                // save id
-                FirebasePluginMessagingService.lastId = id;
+                // // save id
+                // FirebasePluginMessagingService.lastId = id;
             }
 
             if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {

@@ -48,23 +48,23 @@ public class OverlayActivity extends Activity {
 
         //////////////
 
-        Data data = new Data.Builder()
-                .putInt("number", 10)
-                .build();
+        // Data data = new Data.Builder()
+        //         .putInt("number", 10)
+        //         .build();
 
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiresCharging(true)
-                .build();
+        // Constraints constraints = new Constraints.Builder()
+        //         .setRequiredNetworkType(NetworkType.CONNECTED)
+        //         .setRequiresCharging(true)
+        //         .build();
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 5, TimeUnit.MINUTES)
-                .setInputData(data)
-                .setConstraints(constraints)
-                //.setInitialDelay(8, TimeUnit.MINUTES)
-                .addTag("PRDW")
-                .build();
+        // PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 5, TimeUnit.MINUTES)
+        //         .setInputData(data)
+        //         .setConstraints(constraints)
+        //         //.setInitialDelay(8, TimeUnit.MINUTES)
+        //         .addTag("PRDW")
+        //         .build();
 
-        WorkManager.getInstance(this).enqueue(periodicWorkRequest);
+        // WorkManager.getInstance(this).enqueue(periodicWorkRequest);
 
         ////////////
         

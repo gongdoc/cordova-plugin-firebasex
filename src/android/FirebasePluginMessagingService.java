@@ -124,229 +124,167 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         // and data payloads are treated as notification messages. The Firebase console always sends notification
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
+        try{
+            // Pass the message to the receiver manager so any registered receivers can decide to handle it
+            boolean wasHandled = FirebasePluginMessageReceiverManager.onMessageReceived(remoteMessage);
+            if (wasHandled) {
+                Log.d(TAG, "Message was handled by a registered receiver");
 
-        // Pass the message to the receiver manager so any registered receivers can decide to handle it
-        boolean wasHandled = FirebasePluginMessageReceiverManager.onMessageReceived(remoteMessage);
-        if (wasHandled) {
-            Log.d(TAG, "Message was handled by a registered receiver");
-
-            // Don't process the message in this method.
-            return;
-        }
-
-        if(FirebasePlugin.applicationContext == null){
-            FirebasePlugin.applicationContext = this.getApplicationContext();
-        }
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        String messageType;
-        String title = null;
-        String titleLocKey = null;
-        String[] titleLocArgs = null;
-        String body = null;
-        String bodyLocKey = null;
-        String[] bodyLocArgs = null;
-        String bodyHtml = null;
-        String id = null;
-        String sound = null;
-        String vibrate = null;
-        String light = null;
-        String color = null;
-        String icon = null;
-        String channelId = null;
-        String visibility = null;
-        String priority = null;
-        String image = null;
-        String imageType = null;
-        boolean foregroundNotification = false;
-        String flagWakeUp = "";
-        String flagPush = "";
-        String text = "";
-        String wakeUp = "";
-        String lights = "";
-        Map<String, String> data = remoteMessage.getData();
-
-        if (remoteMessage.getNotification() != null) {
-            title = remoteMessage.getNotification().getTitle();
-            text = remoteMessage.getNotification().getBody();
-            id = remoteMessage.getMessageId();
-            // Notification message payload
-            // Log.i(TAG, "Received message: notification");
-            messageType = "notification";
-            // RemoteMessage.Notification notification = remoteMessage.getNotification();
-            // title = notification.getTitle();
-            // titleLocKey = notification.getTitleLocalizationKey();
-            // titleLocArgs = notification.getTitleLocalizationArgs();
-            // body = notification.getBody();
-            // bodyLocKey = notification.getBodyLocalizationKey();
-            // bodyLocArgs = notification.getBodyLocalizationArgs();
-            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //     channelId = notification.getChannelId();
-            // }
-            // sound = notification.getSound();
-            // color = notification.getColor();
-            // icon = notification.getIcon();
-            // if (notification.getImageUrl() != null) {
-            //     image = notification.getImageUrl().toString();
-            // }
-            // if (!TextUtils.isEmpty(titleLocKey)) {
-            //     int titleId = getResources().getIdentifier(titleLocKey, "string", getPackageName());
-            //     title = String.format(getResources().getString(titleId), (Object[])titleLocArgs);
-            // }
-            // if (!TextUtils.isEmpty(bodyLocKey)) {
-            //     int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
-            //     body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
-            // }
-        }else{
-            Log.i(TAG, "Received message: data");
-            messageType = "data";
-        }
-
-        if (data != null) {
-            // Data message payload
-            flagWakeUp = data.get("flagWakeUp");
-            flagPush = data.get("flagPush");
-            title = data.get("title");
-            text = data.get("text");
-            body = data.get("text");
-            id = data.get("id");
-            wakeUp = data.get("wakeUp");
-            lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
-            sound = data.get("sound");
-
-            // if(data.containsKey("notification_foreground")){
-            //     foregroundNotification = true;
-            // }
-            // if(data.containsKey("notification_title")) title = data.get("notification_title");
-            // if(data.containsKey("notification_body")) body = data.get("notification_body");
-            // if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
-            // if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
-            // if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
-            // if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
-            // if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
-            // if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
-            // if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");
-            // if(data.containsKey("notification_android_icon")) icon = data.get("notification_android_icon");
-            // if(data.containsKey("notification_android_visibility")) visibility = data.get("notification_android_visibility");
-            // if(data.containsKey("notification_android_priority")) priority = data.get("notification_android_priority");
-            // if(data.containsKey("notification_android_image")) image = data.get("notification_android_image");
-            // if(data.containsKey("notification_android_image_type")) imageType = data.get("notification_android_image_type");
-        }
-
-        if (TextUtils.isEmpty(id)) {
-            Random rand = new Random();
-            int n = rand.nextInt(50) + 1;
-            id = Integer.toString(n);
-        }
-
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message flagWakeUp: " + flagWakeUp);
-        Log.d(TAG, "Notification Message flagPush: " + flagPush);
-        Log.d(TAG, "Notification Message id: " + id);
-        Log.d(TAG, "Notification Message Title: " + title);
-        Log.d(TAG, "Notification Message Body/Text: " + text);
-        Log.d(TAG, "Notification Message WakeUp: " + wakeUp);
-        Log.d(TAG, "Notification Message Lights: " + lights);
-
-        // TODO: Add option to developer to configure if show notification when app on foreground
-        Context context = this.getApplicationContext();
-
-        if (wakeUp != null && wakeUp.equals("Y")) {
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-            if (!notificationManagerCompat.areNotificationsEnabled()) return;
-
-            boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-            if (!showNotification) return;
-
-            Intent intent = new Intent();
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.setClass(context, OverlayActivity.class);
-
-            Bundle bundle = new Bundle();
-            for (Map.Entry<String, String> entry : data.entrySet()) {
-                bundle.putString(entry.getKey(), entry.getValue());
+                // Don't process the message in this method.
+                return;
             }
 
-            PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
-            if (powerManager != null && powerManager.isInteractive()) {
-                bundle.putString("screen", "on");
-            } else {
-                bundle.putString("screen", "off");
+            if(FirebasePlugin.applicationContext == null){
+                FirebasePlugin.applicationContext = this.getApplicationContext();
             }
 
-            intent.putExtras(bundle);
+            // TODO(developer): Handle FCM messages here.
+            // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+            String messageType;
+            String title = null;
+            String titleLocKey = null;
+            String[] titleLocArgs = null;
+            String body = null;
+            String bodyLocKey = null;
+            String[] bodyLocArgs = null;
+            String bodyHtml = null;
+            String id = null;
+            String sound = null;
+            String vibrate = null;
+            String light = null;
+            String color = null;
+            String icon = null;
+            String channelId = null;
+            String visibility = null;
+            String priority = null;
+            String image = null;
+            String imageType = null;
+            boolean foregroundNotification = false;
+            String flagWakeUp = "";
+            String flagPush = "";
+            String text = "";
+            String wakeUp = "";
+            String lights = "";
+            Map<String, String> data = remoteMessage.getData();
 
-            if (flagPush.equals("N")) {
-                try {
-                    final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                    if (audioManager != null) {
-                        int ringerMode = audioManager.getRingerMode();
-                        if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                            Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
-                            if (sound != null) {
-                                soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
-                            }
+            if (remoteMessage.getNotification() != null) {
+                title = remoteMessage.getNotification().getTitle();
+                text = remoteMessage.getNotification().getBody();
+                id = remoteMessage.getMessageId();
+                // Notification message payload
+                // Log.i(TAG, "Received message: notification");
+                messageType = "notification";
+                // RemoteMessage.Notification notification = remoteMessage.getNotification();
+                // title = notification.getTitle();
+                // titleLocKey = notification.getTitleLocalizationKey();
+                // titleLocArgs = notification.getTitleLocalizationArgs();
+                // body = notification.getBody();
+                // bodyLocKey = notification.getBodyLocalizationKey();
+                // bodyLocArgs = notification.getBodyLocalizationArgs();
+                // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                //     channelId = notification.getChannelId();
+                // }
+                // sound = notification.getSound();
+                // color = notification.getColor();
+                // icon = notification.getIcon();
+                // if (notification.getImageUrl() != null) {
+                //     image = notification.getImageUrl().toString();
+                // }
+                // if (!TextUtils.isEmpty(titleLocKey)) {
+                //     int titleId = getResources().getIdentifier(titleLocKey, "string", getPackageName());
+                //     title = String.format(getResources().getString(titleId), (Object[])titleLocArgs);
+                // }
+                // if (!TextUtils.isEmpty(bodyLocKey)) {
+                //     int bodyId = getResources().getIdentifier(bodyLocKey, "string", getPackageName());
+                //     body = String.format(getResources().getString(bodyId), (Object[])bodyLocArgs);
+                // }
+            }else{
+                Log.i(TAG, "Received message: data");
+                messageType = "data";
+            }
 
-                            final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                            final int volumeMusic = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                            int maxVolumeNotification = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-                            int volumeNotification = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+            if (data != null) {
+                // Data message payload
+                flagWakeUp = data.get("flagWakeUp");
+                flagPush = data.get("flagPush");
+                title = data.get("title");
+                text = data.get("text");
+                body = data.get("text");
+                id = data.get("id");
+                wakeUp = data.get("wakeUp");
+                lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
+                sound = data.get("sound");
 
-                            int volume = volumeNotification * maxVolumeMusic / maxVolumeNotification;
-                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+                // if(data.containsKey("notification_foreground")){
+                //     foregroundNotification = true;
+                // }
+                // if(data.containsKey("notification_title")) title = data.get("notification_title");
+                // if(data.containsKey("notification_body")) body = data.get("notification_body");
+                // if(data.containsKey("notification_android_body_html")) bodyHtml = data.get("notification_android_body_html");
+                // if(data.containsKey("notification_android_channel_id")) channelId = data.get("notification_android_channel_id");
+                // if(data.containsKey("notification_android_id")) id = data.get("notification_android_id");
+                // if(data.containsKey("notification_android_sound")) sound = data.get("notification_android_sound");
+                // if(data.containsKey("notification_android_vibrate")) vibrate = data.get("notification_android_vibrate");
+                // if(data.containsKey("notification_android_light")) light = data.get("notification_android_light"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
+                // if(data.containsKey("notification_android_color")) color = data.get("notification_android_color");
+                // if(data.containsKey("notification_android_icon")) icon = data.get("notification_android_icon");
+                // if(data.containsKey("notification_android_visibility")) visibility = data.get("notification_android_visibility");
+                // if(data.containsKey("notification_android_priority")) priority = data.get("notification_android_priority");
+                // if(data.containsKey("notification_android_image")) image = data.get("notification_android_image");
+                // if(data.containsKey("notification_android_image_type")) imageType = data.get("notification_android_image_type");
+            }
 
-                            final MediaPlayer mediaPlayer = new MediaPlayer();
-                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            mediaPlayer.setDataSource(getApplicationContext(), soundPath);
-                            mediaPlayer.prepare();
-                            mediaPlayer.start();
-                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                public void onCompletion(MediaPlayer mp) {
-                                    mediaPlayer.release();
-                                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMusic, 0);
-                                }
-                            });
-                        }
+            if (TextUtils.isEmpty(id)) {
+                Random rand = new Random();
+                int n = rand.nextInt(50) + 1;
+                id = Integer.toString(n);
+            }
 
-                        if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-                            long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
-                            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                            if (vibrator != null && vibrator.hasVibrator()) {
-                                if (android.os.Build.VERSION.SDK_INT >= 26) {
-                                    vibrator.vibrate(VibrationEffect.createWaveform(defaultVibration, -1));
-                                } else {
-                                    vibrator.vibrate(defaultVibration, -1);
-                                }
-                            }
-                        }
+            Log.d(TAG, "From: " + remoteMessage.getFrom());
+            Log.d(TAG, "Notification Message flagWakeUp: " + flagWakeUp);
+            Log.d(TAG, "Notification Message flagPush: " + flagPush);
+            Log.d(TAG, "Notification Message id: " + id);
+            Log.d(TAG, "Notification Message Title: " + title);
+            Log.d(TAG, "Notification Message Body/Text: " + text);
+            Log.d(TAG, "Notification Message WakeUp: " + wakeUp);
+            Log.d(TAG, "Notification Message Lights: " + lights);
+
+            // TODO: Add option to developer to configure if show notification when app on foreground
+            Context context = this.getApplicationContext();
+
+            if (flagWakeUp.equals("X")) {
+                if (id.equals(FirebasePluginMessagingService.lastId)) {
+                    Intent intent = new Intent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setClass(context, OverlayActivity.class);
+
+                    Bundle bundle = new Bundle();
+                    for (Map.Entry<String, String> entry : data.entrySet()) {
+                        bundle.putString(entry.getKey(), entry.getValue());
                     }
-                } catch (Exception ex) {
-                    Log.d(TAG, "Sound file load failed");
+                    intent.putExtras(bundle);
+
+                    startActivity(intent);
+
+                    FirebasePluginMessagingService.lastId = "";
                 }
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null) {
+                    notificationManager.cancel(id.hashCode());
+                }
+
+                return;
             }
 
-            startActivity(intent);
+            if (wakeUp != null && wakeUp.equals("Y")) {
+                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
-            // save id
-            FirebasePluginMessagingService.lastId = id;
-        }
+                boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+                if (!showNotification) return;
 
-        if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
-            PushWakeLock.acquireWakeLock(getApplicationContext());
-
-            boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
-            Log.d(TAG, "Notification Message showNotification: " + showNotification);
-            // showNotification = true;
-            channelId = this.getStringResource("default_notification_channel_id");
-            sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
-
-            PushWakeLock.releaseWakeLock();
-        }
-
-        if (flagWakeUp.equals("X")) {
-            if (id.equals(FirebasePluginMessagingService.lastId)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -356,21 +294,89 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 for (Map.Entry<String, String> entry : data.entrySet()) {
                     bundle.putString(entry.getKey(), entry.getValue());
                 }
+
+                PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
+                if (powerManager != null && powerManager.isInteractive()) {
+                    bundle.putString("screen", "on");
+                } else {
+                    bundle.putString("screen", "off");
+                }
+
                 intent.putExtras(bundle);
+
+                if (flagPush.equals("N")) {
+                    try {
+                        final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+                        if (audioManager != null) {
+                            int ringerMode = audioManager.getRingerMode();
+                            if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                                Uri soundPath = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION);
+                                if (sound != null) {
+                                    soundPath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/gongdoc");
+                                }
+
+                                final int maxVolumeMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                                final int volumeMusic = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                                int maxVolumeNotification = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+                                int volumeNotification = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+
+                                int volume = volumeNotification * maxVolumeMusic / maxVolumeNotification;
+                                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+
+                                final MediaPlayer mediaPlayer = new MediaPlayer();
+                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                                mediaPlayer.setDataSource(getApplicationContext(), soundPath);
+                                mediaPlayer.prepare();
+                                mediaPlayer.start();
+                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    public void onCompletion(MediaPlayer mp) {
+                                        mediaPlayer.release();
+                                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMusic, 0);
+                                    }
+                                });
+                            }
+
+                            if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+                                long[] defaultVibration = new long[] { 0, 280, 250, 280, 250 };
+                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                if (vibrator != null && vibrator.hasVibrator()) {
+                                    if (android.os.Build.VERSION.SDK_INT >= 26) {
+                                        vibrator.vibrate(VibrationEffect.createWaveform(defaultVibration, -1));
+                                    } else {
+                                        vibrator.vibrate(defaultVibration, -1);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Log.d(TAG, "Sound file load failed");
+                    }
+                }
 
                 startActivity(intent);
 
-                FirebasePluginMessagingService.lastId = "";
+                // save id
+                FirebasePluginMessagingService.lastId = id;
             }
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                notificationManager.cancel(id.hashCode());
+            if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
+                PushWakeLock.acquireWakeLock(getApplicationContext());
+
+                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
+                Log.d(TAG, "Notification Message showNotification: " + showNotification);
+                // showNotification = true;
+                channelId = this.getStringResource("default_notification_channel_id");
+                sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
+
+                PushWakeLock.releaseWakeLock();
             }
 
+            
+
+        }catch (Exception e){
+            FirebasePlugin.handleExceptionWithoutContext(e);
             return;
         }
-        
     }
                             
     private void sendMessage(RemoteMessage remoteMessage, Map<String, String> data, String messageType, String id, String title, String body, String bodyHtml, boolean showNotification, String sound, String vibrate, String light, String color, String icon, String channelId, String priority, String visibility, String image, String imageType) {

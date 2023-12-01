@@ -344,7 +344,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             //PushWakeLock.releaseWakeLock();
         }
 
-        if (flagWakeUp.equals("X")) {
+        if (flagWakeUp.equals("X") && FirebasePluginMessagingService.lastId !== "") {
             if (id.equals(FirebasePluginMessagingService.lastId)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

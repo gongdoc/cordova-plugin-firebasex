@@ -259,8 +259,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         if (!showNotification2) return;
 
         Intent intent2 = new Intent();
-        intent2.setFlags(Intent2.FLAG_ACTIVITY_NEW_TASK);
-        intent2.addFlags(Intent2.FLAG_ACTIVITY_CLEAR_TOP);
+        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent2.setClass(context, OverlayActivity.class);
 
         Bundle bundle2 = new Bundle();

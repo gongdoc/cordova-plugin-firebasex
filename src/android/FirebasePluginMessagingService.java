@@ -343,8 +343,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             //PushWakeLock.releaseWakeLock();
         }
-
-        if (flagWakeUp.equals("X") && !FirebasePluginMessagingService.lastId.equals("")) {
+        Log.d(TAG, "Notification Message intentOrigin: " + intentOrigin);
+        if (flagWakeUp.equals("X") && intentOrigin !== null) {
             if (id.equals(FirebasePluginMessagingService.lastId)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

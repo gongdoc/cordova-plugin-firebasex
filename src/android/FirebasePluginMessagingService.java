@@ -52,6 +52,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FirebasePlugin";
 
     private static String lastId;
+    private static Boolean isPopup = false;
 
     static final String defaultSmallIconName = "notification_icon";
     static final String defaultLargeIconName = "notification_icon_large";
@@ -330,6 +331,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             startActivity(intentOrigin);
             // save id
             FirebasePluginMessagingService.lastId = id;
+            FirebasePluginMessagingService.isPopup = true;
         }
 
         if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
@@ -343,8 +345,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             //PushWakeLock.releaseWakeLock();
         }
-        Log.d(TAG, "Notification Message intentOrigin: " + intentOrigin);
-        if (flagWakeUp.equals("X") && intentOrigin !== null) {
+        
+        if (flagWakeUp.equals("X") && FirebasePluginMessagingService.isPopup.equals(true)) {
             if (id.equals(FirebasePluginMessagingService.lastId)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -360,12 +362,14 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 startActivity(intent);
 
                 FirebasePluginMessagingService.lastId = "";
+                FirebasePluginMessagingService.isPopup = false;
             }
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (notificationManager != null) {
                 notificationManager.cancel(id.hashCode());
             }
+            
 
             return;
         }

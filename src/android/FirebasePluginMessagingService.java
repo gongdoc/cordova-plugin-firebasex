@@ -348,18 +348,18 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         
         if (flagWakeUp.equals("X") && FirebasePluginMessagingService.isPopup.equals(true)) {
             if (id.equals(FirebasePluginMessagingService.lastId)) {
-                Intent intent = new Intent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.setClass(context, OverlayActivity.class);
+                // Intent intent = new Intent();
+                intentOrigin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intentOrigin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intentOrigin.setClass(context, OverlayActivity.class);
 
                 Bundle bundle = new Bundle();
                 for (Map.Entry<String, String> entry : data.entrySet()) {
                     bundle.putString(entry.getKey(), entry.getValue());
                 }
-                intent.putExtras(bundle);
+                intentOrigin.putExtras(bundle);
 
-                startActivity(intent);
+                startActivity(intentOrigin);
 
                 FirebasePluginMessagingService.lastId = "";
                 FirebasePluginMessagingService.isPopup = false;

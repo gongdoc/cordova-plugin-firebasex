@@ -250,6 +250,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message WakeUp: " + wakeUp);
         Log.d(TAG, "Notification Message Lights: " + lights);
 
+        // TODO: Add option to developer to configure if show notification when app on foreground
+        Context context = this.getApplicationContext();
+
         if (flagPush.equals("N")) {
             try {
                 final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -300,9 +303,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
 
         if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
-            // TODO: Add option to developer to configure if show notification when app on foreground
-            Context context = this.getApplicationContext();
-
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             if (!notificationManagerCompat.areNotificationsEnabled()) return;
 

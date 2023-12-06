@@ -364,10 +364,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 FirebasePluginMessagingService.lastId = "";
             }
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                notificationManager.cancel(id.hashCode());
-            }
+            // NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // if (notificationManager != null) {
+            //     notificationManager.cancel(id.hashCode());
+            // }
             FirebasePluginMessagingService.isPopup = false;
             return;
         }
@@ -579,12 +579,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             notificationManager.notify(id.hashCode(), notification);
 
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        } else {
-            bundle.putString("tap", "background");
-            bundle.putString("title", title);
-            bundle.putString("body", body);
-            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        }
+        } 
+        // else {
+        //     bundle.putString("tap", "background");
+        //     bundle.putString("title", title);
+        //     bundle.putString("body", body);
+        //     FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
+        // }
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

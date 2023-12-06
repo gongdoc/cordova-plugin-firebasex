@@ -579,13 +579,12 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             notificationManager.notify(id.hashCode(), notification);
 
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        } 
-        // else {
-        //     bundle.putString("tap", "background");
-        //     bundle.putString("title", title);
-        //     bundle.putString("body", body);
-        //     FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        // }
+        } else {
+            bundle.putString("tap", "background");
+            bundle.putString("title", title);
+            bundle.putString("body", body);
+            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
+        }
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

@@ -258,16 +258,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         boolean showNotification2 = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
         if (!showNotification2) return;
 
-        Intent intentOrigin = new Intent();
-        intentOrigin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intentOrigin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intentOrigin.setClass(context, OverlayActivity.class);
-
-        Bundle bundleOrigin = new Bundle();
-        for (Map.Entry<String, String> entry : data.entrySet()) {
-            bundleOrigin.putString(entry.getKey(), entry.getValue());
-        }
-
         PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
         if (powerManager != null && powerManager.isInteractive()) {
             bundleOrigin.putString("screen", "on");
@@ -275,7 +265,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             bundleOrigin.putString("screen", "off");
         }
 
-        intentOrigin.putExtras(bundleOrigin);
         FirebasePluginMessagingService.lastId = id;
 
         if (flagPush.equals("N")) {
@@ -328,6 +317,17 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
 
         if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
+            Intent intentOrigin = new Intent();
+            intentOrigin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intentOrigin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intentOrigin.setClass(context, OverlayActivity.class);
+
+            Bundle bundleOrigin = new Bundle();
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                bundleOrigin.putString(entry.getKey(), entry.getValue());
+            }
+
+            intentOrigin.putExtras(bundleOrigin);
             startActivity(intentOrigin);
             // save id
         }

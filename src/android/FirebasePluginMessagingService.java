@@ -52,6 +52,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FirebasePlugin";
 
     private static String lastId;
+    private static Boolean isPopup = false;
     
     static final String defaultSmallIconName = "notification_icon";
     static final String defaultLargeIconName = "notification_icon_large";
@@ -259,7 +260,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         if (!showNotification2) return;
 
         FirebasePluginMessagingService.lastId = id;
-
+        
         if (flagPush.equals("N")) {
             try {
                 final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -329,7 +330,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             } else {
                 bundleOrigin.putString("screen", "off");
             }
-
+            
+            FirebasePluginMessagingService.isPopup = true;
             // save id
         }
 
@@ -346,7 +348,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
         
         if (flagWakeUp.equals("X")) {  
-            if (id.equals(FirebasePluginMessagingService.lastId)) {
+            if (id.equals(FirebasePluginMessagingService.lastId) && FirebasePluginMessagingService.isPopup.equals(true)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -367,7 +369,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             if (notificationManager != null) {
                 notificationManager.cancel(id.hashCode());
             }
-            
+            FirebasePluginMessagingService.isPopup = false;
             return;
         }
         

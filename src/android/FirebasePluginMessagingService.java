@@ -302,7 +302,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
         }
 
-        if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
+        if (wakeUp != null && wakeUp.equals("Y")) {
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             if (!notificationManagerCompat.areNotificationsEnabled()) return;
 

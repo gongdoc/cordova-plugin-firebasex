@@ -136,9 +136,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
 
             ///////////////////////
-            // if(FirebasePlugin.applicationContext == null){
-            //     FirebasePlugin.applicationContext = this.getApplicationContext();
-            // }
+            if(FirebasePlugin.applicationContext == null){
+                FirebasePlugin.applicationContext = this.getApplicationContext();
+            }
 
             // TODO(developer): Handle FCM messages here.
             // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
@@ -405,7 +405,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("sent_time", String.valueOf(remoteMessage.getSentTime()), bundle);
         this.putKVInBundle("ttl", String.valueOf(remoteMessage.getTtl()), bundle);
 
-        if (showNotification) {
+        //if (showNotification) {
             Intent intent;
             PendingIntent pendingIntent;
             final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
@@ -583,12 +583,12 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             notificationManager.notify(id.hashCode(), notification);
 
             FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        } else {
-            bundle.putString("tap", "background");
-            bundle.putString("title", title);
-            bundle.putString("body", body);
-            FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
-        }
+        // } else {
+        //     bundle.putString("tap", "background");
+        //     bundle.putString("title", title);
+        //     bundle.putString("body", body);
+        //     FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
+        // }
     }
 
     private Bitmap getCircleBitmap(Bitmap bitmap) {

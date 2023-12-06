@@ -336,18 +336,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 FirebasePluginMessagingService.lastId = id;
             }
 
-            if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
-                PushWakeLock.acquireWakeLock(getApplicationContext());
-
-                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
-                Log.d(TAG, "Notification Message showNotification: " + showNotification);
-                // showNotification = true;
-                channelId = this.getStringResource("default_notification_channel_id");
-                sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
-
-                PushWakeLock.releaseWakeLock();
-            }
-
             if (flagWakeUp.equals("X")) {
                 if (id.equals(FirebasePluginMessagingService.lastId)) {
                     Intent intent = new Intent();
@@ -373,6 +361,19 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
                 return;
             }
+
+            if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
+                PushWakeLock.acquireWakeLock(getApplicationContext());
+
+                boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(body) || !TextUtils.isEmpty(title));
+                Log.d(TAG, "Notification Message showNotification: " + showNotification);
+                // showNotification = true;
+                channelId = this.getStringResource("default_notification_channel_id");
+                sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
+
+                PushWakeLock.releaseWakeLock();
+            }
+
         }catch (Exception e){
             FirebasePlugin.handleExceptionWithoutContext(e);
         }

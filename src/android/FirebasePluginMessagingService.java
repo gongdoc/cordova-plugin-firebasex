@@ -256,11 +256,11 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
 
-                // NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-                // if (!notificationManagerCompat.areNotificationsEnabled()) return;
+                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
-                // boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-                // if (!showNotification) return;
+                boolean showNotification = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+                if (!showNotification) return;
 
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -620,7 +620,7 @@ public class FirebasePlugin extends CordovaPlugin {
 
         final CallbackContext callbackContext = FirebasePlugin.tokenRefreshCallbackContext;
         if (callbackContext != null && token != null) {
-            FirebasePlugin.instance.sendPluginResultAndKeepCallback(token, callbackContext);
+            FirebasePlugin.instance.(token, callbackContext);
         }
     }
 

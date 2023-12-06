@@ -302,7 +302,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
         }
 
-        if (wakeUp != null && wakeUp.equals("Y")) {
+        if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
+
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
@@ -346,32 +347,32 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             PushWakeLock.releaseWakeLock();
         }
         
-        if (flagWakeUp.equals("X")) {  
-            if (id.equals(FirebasePluginMessagingService.lastId)) {
-                Intent intent = new Intent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.setClass(context, OverlayActivity.class);
+        // if (flagWakeUp.equals("X")) {  
+        //     if (id.equals(FirebasePluginMessagingService.lastId)) {
+        //         Intent intent = new Intent();
+        //         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //         intent.setClass(context, OverlayActivity.class);
 
-                Bundle bundle = new Bundle();
-                for (Map.Entry<String, String> entry : data.entrySet()) {
-                    bundle.putString(entry.getKey(), entry.getValue());
-                }
-                intent.putExtras(bundle);
+        //         Bundle bundle = new Bundle();
+        //         for (Map.Entry<String, String> entry : data.entrySet()) {
+        //             bundle.putString(entry.getKey(), entry.getValue());
+        //         }
+        //         intent.putExtras(bundle);
 
-                startActivity(intent);
+        //         startActivity(intent);
 
-                FirebasePluginMessagingService.lastId = "";
-                FirebasePluginMessagingService.isPopup = false;
-            }
+        //         FirebasePluginMessagingService.lastId = "";
+        //         FirebasePluginMessagingService.isPopup = false;
+        //     }
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                notificationManager.cancel(id.hashCode());
-            }
+        //     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //     if (notificationManager != null) {
+        //         notificationManager.cancel(id.hashCode());
+        //     }
             
-            return;
-        }
+        //     return;
+        // }
         
     }
                             

@@ -258,13 +258,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         boolean showNotification2 = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
         if (!showNotification2) return;
 
-        PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null && powerManager.isInteractive()) {
-            bundleOrigin.putString("screen", "on");
-        } else {
-            bundleOrigin.putString("screen", "off");
-        }
-
         FirebasePluginMessagingService.lastId = id;
 
         if (flagPush.equals("N")) {
@@ -329,6 +322,14 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             intentOrigin.putExtras(bundleOrigin);
             startActivity(intentOrigin);
+
+            PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);
+            if (powerManager != null && powerManager.isInteractive()) {
+                bundleOrigin.putString("screen", "on");
+            } else {
+                bundleOrigin.putString("screen", "off");
+            }
+
             // save id
         }
 

@@ -52,8 +52,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FirebasePlugin";
 
     private static String lastId;
-    private static Boolean isPopup = false;
-
+    
     static final String defaultSmallIconName = "notification_icon";
     static final String defaultLargeIconName = "notification_icon_large";
 
@@ -331,7 +330,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
             startActivity(intentOrigin);
             // save id
-            FirebasePluginMessagingService.isPopup = true;
         }
 
         if (flagPush.equals("Y") && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || !data.isEmpty())) {
@@ -347,7 +345,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
         
         if (flagWakeUp.equals("X")) {  
-            if (id.equals(FirebasePluginMessagingService.lastId) && FirebasePluginMessagingService.isPopup.equals(true)) {
+            if (id.equals(FirebasePluginMessagingService.lastId)) {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -362,7 +360,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 startActivity(intent);
 
                 FirebasePluginMessagingService.lastId = "";
-                FirebasePluginMessagingService.isPopup = false;
             }
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

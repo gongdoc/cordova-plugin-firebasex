@@ -346,8 +346,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             //PushWakeLock.releaseWakeLock();
         }
         
-        if (flagWakeUp.equals("X") && FirebasePluginMessagingService.isPopup.equals(true)) {
-            if (id.equals(FirebasePluginMessagingService.lastId)) {
+        if (flagWakeUp.equals("X")) {  
+            if (id.equals(FirebasePluginMessagingService.lastId) && FirebasePluginMessagingService.isPopup.equals(true)) {
                 // Intent intent = new Intent();
                 intentOrigin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intentOrigin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -370,7 +370,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 notificationManager.cancel(id.hashCode());
             }
             
-
             return;
         }
         

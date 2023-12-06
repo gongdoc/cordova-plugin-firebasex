@@ -302,7 +302,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
         }
 
-        if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
+        // if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
+        if (wakeUp != null && wakeUp.equals("Y")) {
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             if (!notificationManagerCompat.areNotificationsEnabled()) return;
 
@@ -364,14 +365,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 FirebasePluginMessagingService.lastId = "";
             }
 
-            // NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            // if (notificationManager != null) {
-            //     notificationManager.cancel(id.hashCode());
-            // }
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.cancel(id.hashCode());
+            }
             FirebasePluginMessagingService.isPopup = false;
             return;
         }
-        
     }
                             
     private void sendMessage(RemoteMessage remoteMessage, Map<String, String> data, String messageType, String id, String title, String body, String bodyHtml, boolean showNotification, String sound, String vibrate, String light, String color, String icon, String channelId, String priority, String visibility, String image, String imageType) {

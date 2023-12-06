@@ -406,36 +406,27 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("ttl", String.valueOf(remoteMessage.getTtl()), bundle);
 
         if (showNotification) {
-            // Intent intent;
-            // PendingIntent pendingIntent;
-            // final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
+            Intent intent;
+            PendingIntent pendingIntent;
+            final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;  // Only add on platform levels that support FLAG_MUTABLE
 
-            // if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.S && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            //     intent = new Intent(this, OnNotificationReceiverActivity.class);
-            //     intent.putExtras(bundle);
-            //     pendingIntent = PendingIntent.getActivity(this, id.hashCode(), intent, flag);
-            // }else{
-            //     intent = new Intent(this, OnNotificationOpenReceiver.class);
-            //     intent.putExtras(bundle);
-            //     pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, flag);
-            // }
+            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.S && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                intent = new Intent(this, OnNotificationReceiverActivity.class);
+                intent.putExtras(bundle);
+                pendingIntent = PendingIntent.getActivity(this, id.hashCode(), intent, flag);
+            }else{
+                intent = new Intent(this, OnNotificationOpenReceiver.class);
+                intent.putExtras(bundle);
+                pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, flag);
+            }
 
-            // // Channel
-            // if(channelId == null || !FirebasePlugin.channelExists(channelId)){
-            //     channelId = FirebasePlugin.defaultChannelId;
-            // }
-            // if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            //     Log.d(TAG, "Channel ID: "+channelId);
-            // }
-            Intent intent = new Intent(this, OnNotificationOpenReceiver.class);
-            intent.putExtras(bundle);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            String groupId = getPackageName() + ".NOTIFICATIONS";
-
-            // String channelId = this.getStringResource("default_notification_channel_id");
-            String channelName = this.getStringResource("default_notification_channel_name");
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            // Channel
+            if(channelId == null || !FirebasePlugin.channelExists(channelId)){
+                channelId = FirebasePlugin.defaultChannelId;
+            }
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                Log.d(TAG, "Channel ID: "+channelId);
+            }
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
             notificationBuilder
@@ -589,8 +580,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             Log.d(TAG, "show notification: "+notification.toString());
             notificationManager.notify(id.hashCode(), notification);
-
-            // FirebasePlugin.sendMessage(bundle, this.getApplicationContext());
         } else {
             bundle.putString("tap", "background");
             bundle.putString("title", title);

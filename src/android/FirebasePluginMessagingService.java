@@ -250,17 +250,6 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message WakeUp: " + wakeUp);
         Log.d(TAG, "Notification Message Lights: " + lights);
 
-        // TODO: Add option to developer to configure if show notification when app on foreground
-        Context context = this.getApplicationContext();
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        if (!notificationManagerCompat.areNotificationsEnabled()) return;
-
-        boolean showNotification2 = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-        if (!showNotification2) return;
-
-        FirebasePluginMessagingService.lastId = id;
-        
         if (flagPush.equals("N")) {
             try {
                 final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -311,6 +300,15 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         }
 
         if (wakeUp != null && wakeUp.equals("Y") && flagWakeUp.equals("Y")) {
+            // TODO: Add option to developer to configure if show notification when app on foreground
+            Context context = this.getApplicationContext();
+
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+            if (!notificationManagerCompat.areNotificationsEnabled()) return;
+
+            boolean showNotification2 = (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+            if (!showNotification2) return;
+
             Intent intentOrigin = new Intent();
             intentOrigin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intentOrigin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -332,6 +330,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
             
             FirebasePluginMessagingService.isPopup = true;
+            FirebasePluginMessagingService.lastId = id;
             // save id
         }
 

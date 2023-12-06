@@ -433,7 +433,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
             String groupId = getPackageName() + ".NOTIFICATIONS";
 
-            String channelId = this.getStringResource("default_notification_channel_id");
+            // String channelId = this.getStringResource("default_notification_channel_id");
             String channelName = this.getStringResource("default_notification_channel_name");
             Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 

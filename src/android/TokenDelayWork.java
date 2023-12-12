@@ -62,6 +62,8 @@ public class TokenDelayWork extends Worker {
                 .putInt("number", 15)
                 .build();
 
+        FirebasePlugin.getToken();                
+
         return Result.success(outPutData);
     }
 }

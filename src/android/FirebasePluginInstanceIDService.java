@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-
+             
 public class FirebasePluginInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "FirebasePlugin";
@@ -18,7 +18,7 @@ public class FirebasePluginInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        Log.d(TAG, "Notification Message ONT!!!!!!!!!!!!!!!!!!!: " + refreshedToken);
 
         FirebasePlugin.sendToken(refreshedToken);
     }

@@ -45,7 +45,7 @@
 					<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 				</intent-filter>
 			</service>
-			<service android:name="org.apache.cordova.firebase.FirebasePluginInstanceIDService">
+			<service android:exported="false" android:name="org.apache.cordova.firebase.FirebasePluginInstanceIDService">
 				<intent-filter>
 					<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
 				</intent-filter>

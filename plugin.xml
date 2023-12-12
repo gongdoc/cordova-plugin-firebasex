@@ -45,6 +45,11 @@
 					<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 				</intent-filter>
 			</service>
+			<service android:name="org.apache.cordova.firebase.FirebasePluginInstanceIDService">
+				<intent-filter>
+					<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+				</intent-filter>
+			</service>
 			<service android:name="org.apache.cordova.firebase.OverlayService" android:exported="false" />
 			<receiver android:name="org.apache.cordova.firebase.OnNotificationOpenReceiver"/>
 			<activity android:name="org.apache.cordova.firebase.OnNotificationReceiverActivity" android:noHistory="true" android:excludeFromRecents="true" android:taskAffinity="" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:exported="true" />
@@ -87,6 +92,7 @@
 		<source-file src="src/android/TokenDelayWork.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/RoundedRelativeLayout.java" target-dir="src/org/apache/cordova/firebase" />
 		<source-file src="src/android/colors.xml" target-dir="res/values" />
+		<source-file src="src/android/FirebasePluginInstanceIDService.java" target-dir="src/org/apache/cordova/firebase" />
 		
 		<!-- Default versions for Gradle dependencies -->
 		<preference name="ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION" default="18.0.2" />

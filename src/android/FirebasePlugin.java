@@ -163,7 +163,7 @@ public class FirebasePlugin extends CordovaPlugin {
     private static boolean inBackground = true;
     private static ArrayList<Bundle> notificationStack = null;
     private static CallbackContext notificationCallbackContext;
-    public static CallbackContext tokenRefreshCallbackContext;
+    private static CallbackContext tokenRefreshCallbackContext;
     private static CallbackContext activityResultCallbackContext;
     private static CallbackContext authResultCallbackContext;
     private static CallbackContext postNotificationPermissionRequestCallbackContext;
@@ -649,11 +649,10 @@ public class FirebasePlugin extends CordovaPlugin {
     }
 
 
-    public static void getToken(JSONArray args, final CallbackContext callbackContext) {
+    private void getToken(JSONArray args, final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
-                    Log.d(TAG, "Notification Message getToken RUN!!!!!!!!!!!!!!!!!!!");
                     FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                         @Override
                         public void onComplete(@NonNull Task<String> task) {
@@ -661,7 +660,6 @@ public class FirebasePlugin extends CordovaPlugin {
                                 if (task.isSuccessful() || task.getException() == null) {
                                     String currentToken = task.getResult();
                                     callbackContext.success(currentToken);
-                                    Log.d(TAG, "Notification Message getToken SUCESS!!!!!!!!!!!!!!!!!!!");
                                 }else if(task.getException() != null){
                                     callbackContext.error(task.getException().getMessage());
                                 }else{

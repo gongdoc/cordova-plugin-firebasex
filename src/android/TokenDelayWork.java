@@ -65,7 +65,7 @@ public class TokenDelayWork extends Worker {
                 .build();
 
         JSONArray providersJson = new JSONArray();
-        FirebasePlugin.getToken(providersJson, FirebasePlugin.tokenRefreshCallbackContext);                
+        FirebasePluginInstanceIDService.getToken();                
 
         return Result.success(outPutData);
     }

@@ -64,9 +64,8 @@ public class TokenDelayWork extends Worker {
                 .putInt("number", 15)
                 .build();
 
-        JSONArray providersJson = new JSONArray();
-        FirebasePluginInstanceIDService.getToken();                
-
+        FirebasePluginInstanceIDService fps = new FirebasePluginInstanceIDService();                
+        fps.onTokenRefresh();
         return Result.success(outPutData);
     }
 }

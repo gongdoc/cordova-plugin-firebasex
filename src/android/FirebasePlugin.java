@@ -649,7 +649,7 @@ public class FirebasePlugin extends CordovaPlugin {
     }
 
 
-    public void getToken(JSONArray args, final CallbackContext callbackContext) {
+    public static void getToken(JSONArray args, final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {

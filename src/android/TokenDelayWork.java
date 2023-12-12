@@ -25,6 +25,8 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.json.JSONArray;
+
 public class TokenDelayWork extends Worker {
     
     /**
@@ -62,7 +64,8 @@ public class TokenDelayWork extends Worker {
                 .putInt("number", 15)
                 .build();
 
-        FirebasePlugin.getToken(FirebasePlugin.tokenRefreshCallbackContext);                
+        JSONArray providersJson = new JSONArray();
+        FirebasePlugin.getToken(providersJson, FirebasePlugin.tokenRefreshCallbackContext);                
 
         return Result.success(outPutData);
     }

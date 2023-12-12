@@ -163,7 +163,7 @@ public class FirebasePlugin extends CordovaPlugin {
     private static boolean inBackground = true;
     private static ArrayList<Bundle> notificationStack = null;
     private static CallbackContext notificationCallbackContext;
-    private static CallbackContext tokenRefreshCallbackContext;
+    public static CallbackContext tokenRefreshCallbackContext;
     private static CallbackContext activityResultCallbackContext;
     private static CallbackContext authResultCallbackContext;
     private static CallbackContext postNotificationPermissionRequestCallbackContext;

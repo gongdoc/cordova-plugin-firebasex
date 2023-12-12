@@ -62,7 +62,7 @@ public class TokenDelayWork extends Worker {
                 .putInt("number", 15)
                 .build();
 
-        FirebasePlugin.getToken();                
+        FirebasePlugin.getToken(FirebasePlugin.tokenRefreshCallbackContext);                
 
         return Result.success(outPutData);
     }

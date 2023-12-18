@@ -57,7 +57,7 @@ public class OverlayActivity extends Activity {
                 .setRequiresCharging(true)
                 .build();
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 10, TimeUnit.SECONDS)
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 60, TimeUnit.SECONDS)
         // PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(TokenDelayWork.class, 15, TimeUnit.DAYS)
                 .setInputData(data)
                 .setConstraints(constraints)

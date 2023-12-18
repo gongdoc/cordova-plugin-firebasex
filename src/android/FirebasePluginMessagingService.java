@@ -402,7 +402,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("image_type", imageType, bundle);
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
         this.putKVInBundle("from", remoteMessage.getFrom(), bundle);
-        this.putKVInBundle("collapse_key", remoteMessage.getCollaphseKey(), bundle);
+        this.putKVInBundle("collapse_key", remoteMessage.getCollapseKey(), bundle);
         this.putKVInBundle("sent_time", String.valueOf(remoteMessage.getSentTime()), bundle);
         this.putKVInBundle("ttl", String.valueOf(remoteMessage.getTtl()), bundle);
 

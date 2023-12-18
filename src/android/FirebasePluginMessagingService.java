@@ -402,7 +402,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         this.putKVInBundle("image_type", imageType, bundle);
         this.putKVInBundle("show_notification", String.valueOf(showNotification), bundle);
         this.putKVInBundle("from", remoteMessage.getFrom(), bundle);
-        this.putKVInBundle("collapse_key", remoteMessage.getCollapseKey(), bundle);
+        this.putKVInBundle("collapse_key", remoteMessage.getCollaphseKey(), bundle);
         this.putKVInBundle("sent_time", String.valueOf(remoteMessage.getSentTime()), bundle);
         this.putKVInBundle("ttl", String.valueOf(remoteMessage.getTtl()), bundle);
 
@@ -447,7 +447,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
 
             // On Android O+ the sound/lights/vibration are determined by the channel ID
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            //if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
                 // Sound
                 if (sound == null) {
                     Log.d(TAG, "Sound: none");
@@ -491,7 +491,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                         Log.e(TAG, e.getMessage());
                     }
                 }
-            }
+            //}
 
             // Icon
             int defaultSmallIconResID = getResources().getIdentifier(defaultSmallIconName, "drawable", getPackageName());
@@ -574,6 +574,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Priority: " + iPriority);
             notificationBuilder.setPriority(iPriority);
 
+            
             // Build notification
             Notification notification = notificationBuilder.build();
 

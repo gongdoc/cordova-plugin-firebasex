@@ -567,14 +567,13 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             notificationBuilder.setVisibility(iVisibility);
 
             // Priority
-            int iPriority = NotificationCompat.PRIORITY_MAX;
-            if(priority != null){
-                iPriority = Integer.parseInt(priority);
-            }
-            Log.d(TAG, "Priority: " + iPriority);
-            notificationBuilder.setPriority(iPriority);
+            // int iPriority = NotificationCompat.PRIORITY_MAX;
+            // if(priority != null){
+            //     iPriority = Integer.parseInt(priority);
+            // }
+            // Log.d(TAG, "Priority: " + iPriority);
+            notificationBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
 
-            
             // Build notification
             Notification notification = notificationBuilder.build();
 

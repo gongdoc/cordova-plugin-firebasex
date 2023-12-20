@@ -461,19 +461,20 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 }
 
                 // Light
-                if (light != null) {
-                    try {
-                        String[] lightsComponents = color.replaceAll("\\s", "").split(",");
-                        if (lightsComponents.length == 3) {
-                            int lightArgb = Color.parseColor(lightsComponents[0]);
-                            int lightOnMs = Integer.parseInt(lightsComponents[1]);
-                            int lightOffMs = Integer.parseInt(lightsComponents[2]);
-                            notificationBuilder.setLights(lightArgb, lightOnMs, lightOffMs);
-                            Log.d(TAG, "Lights: color="+lightsComponents[0]+"; on(ms)="+lightsComponents[2]+"; off(ms)="+lightsComponents[3]);
-                        }
+                // if (light != null) {
+                //     try {
+                //         String[] lightsComponents = color.replaceAll("\\s", "").split(",");
+                //         if (lightsComponents.length == 3) {
+                //             int lightArgb = Color.parseColor(lightsComponents[0]);
+                //             int lightOnMs = Integer.parseInt(lightsComponents[1]);
+                //             int lightOffMs = Integer.parseInt(lightsComponents[2]);
+                //             notificationBuilder.setLights(lightArgb, lightOnMs, lightOffMs);
+                //             Log.d(TAG, "Lights: color="+lightsComponents[0]+"; on(ms)="+lightsComponents[2]+"; off(ms)="+lightsComponents[3]);
+                //         }
 
-                    } catch (Exception e) {}
-                }
+                //     } catch (Exception e) {}
+                // }
+                notificationBuilder.setLights(Color.RED, 500, 500);
 
                 // Vibrate
                 if (vibrate != null){

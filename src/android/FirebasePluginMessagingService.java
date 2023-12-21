@@ -330,7 +330,12 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     }
                 }
 
-                startActivity(intent);
+                new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            startActivity(intent);
+                        }
+                }, 3000);
 
                 // save id
                 FirebasePluginMessagingService.lastId = id;

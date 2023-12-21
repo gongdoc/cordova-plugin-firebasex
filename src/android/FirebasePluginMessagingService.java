@@ -358,7 +358,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 if (notificationManager != null) {
                     notificationManager.cancel(id.hashCode());
                 }
-
+                PushWakeLock.releaseWakeLock();
                 return;
             }
 
@@ -371,10 +371,8 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                 channelId = this.getStringResource("default_notification_channel_id");
                 sendMessage(remoteMessage, data, messageType, id, title, body, bodyHtml, showNotification, sound, vibrate, light, color, icon, channelId, priority, visibility, image, imageType);
 
-                //PushWakeLock.releaseWakeLock();
+                PushWakeLock.releaseWakeLock();
             }
-
-            PushWakeLock.releaseWakeLock();
         }catch (Exception e){
             FirebasePlugin.handleExceptionWithoutContext(e);
         }

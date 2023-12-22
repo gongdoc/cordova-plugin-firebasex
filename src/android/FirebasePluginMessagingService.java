@@ -459,7 +459,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
                     notificationBuilder.setSound(soundPath);
                 }
 
-                Light
+                // Light
                 if (light != null) {
                     try {
                         String[] lightsComponents = color.replaceAll("\\s", "").split(",");

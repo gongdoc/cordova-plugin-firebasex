@@ -254,11 +254,9 @@ public class FirebasePlugin extends CordovaPlugin {
             } else if (action.equals("hasPermission")) {
                 this.hasPermission(callbackContext);
                 return true;
-            }
-            //  else if (action.equals("grantPermission")) {
-            //     this.grantPermission(callbackContext);
-            // } 
-            else if (action.equals("subscribe")) {
+            } else if (action.equals("grantPermission")) {
+                this.grantPermission(callbackContext);
+            } else if (action.equals("subscribe")) {
                 this.subscribe(callbackContext, args.getString(0));
             } else if (action.equals("unsubscribe")) {
                 this.unsubscribe(callbackContext, args.getString(0));
@@ -700,26 +698,26 @@ public class FirebasePlugin extends CordovaPlugin {
         });
     }
 
-    // private void grantPermission(final CallbackContext callbackContext) {
-    //     CordovaPlugin plugin = this;
-    //     cordova.getThreadPool().execute(new Runnable() {
-    //         public void run() {
-    //             try {
-    //                 if(Build.VERSION.SDK_INT >= 33){ // Android 13+
-    //                     boolean hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
-    //                     if(!hasRuntimePermission){
-    //                         String[] permissions = new String[]{qualifyPermission(POST_NOTIFICATIONS)};
-    //                         postNotificationPermissionRequestCallbackContext = callbackContext;
-    //                         requestPermissions(plugin, POST_NOTIFICATIONS_PERMISSION_REQUEST_ID, permissions);
-    //                         sendEmptyPluginResultAndKeepCallback(callbackContext);
-    //                     }
-    //                 }
-    //             } catch (Exception e) {
-    //                 handleExceptionWithContext(e, callbackContext);
-    //             }
-    //         }
-    //     });
-    // }
+    private void grantPermission(final CallbackContext callbackContext) {
+        CordovaPlugin plugin = this;
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    if(Build.VERSION.SDK_INT >= 33){ // Android 13+
+                        boolean hasRuntimePermission = hasRuntimePermission(POST_NOTIFICATIONS);
+                        if(!hasRuntimePermission){
+                            String[] permissions = new String[]{qualifyPermission(POST_NOTIFICATIONS)};
+                            postNotificationPermissionRequestCallbackContext = callbackContext;
+                            requestPermissions(plugin, POST_NOTIFICATIONS_PERMISSION_REQUEST_ID, permissions);
+                            sendEmptyPluginResultAndKeepCallback(callbackContext);
+                        }
+                    }
+                } catch (Exception e) {
+                    handleExceptionWithContext(e, callbackContext);
+                }
+            }
+        });
+    }
 
     private void subscribe(final CallbackContext callbackContext, final String topic) {
         cordova.getThreadPool().execute(new Runnable() {

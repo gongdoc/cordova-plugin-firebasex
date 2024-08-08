@@ -71,8 +71,8 @@ dependencies {
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
 
-    implementation 'com.google.firebase:firebase-common:21.1.0'
-    
+    implementation 'com.google.firebase:firebase-common:20.3.0'
+
     implementation 'com.google.firebase:firebase-firestore:24.6.0'
 }
 

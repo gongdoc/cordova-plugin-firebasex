@@ -71,7 +71,16 @@ dependencies {
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
 
-    implementation platform('com.google.firebase:firebase-bom:29.0.3') // 최신 BOM 사용
-    implementation 'com.google.firebase:firebase-common'
-    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation('com.google.firebase:firebase-firestore:24.1.0') {
+        exclude group: 'com.google.firebase', module: 'firebase-common'
+    }
+    implementation 'com.google.firebase:firebase-common:20.1.1'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.firebase:firebase-common:20.1.1'
+        force 'com.google.firebase:firebase-firestore:24.1.0'
+    }
 }

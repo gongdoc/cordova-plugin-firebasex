@@ -118,7 +118,7 @@
 		<framework src="com.google.firebase:firebase-core:21.1.0" />
 		<framework src="com.google.firebase:firebase-messaging:23.2.0" />
 		<framework src="com.google.firebase:firebase-config:21.3.0" />
-		<framework src="com.google.firebase:firebase-perf:21.3.0" />
+		<framework src="com.google.firebase:firebase-perf:21.4.0" />
 		<framework src="com.google.android.gms:play-services-tagmanager:$ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION" />
 		<framework src="com.google.android.gms:play-services-auth:$ANDROID_PLAY_SERVICES_AUTH_VERSION" />
 		<framework src="com.google.firebase:firebase-analytics:$ANDROID_FIREBASE_ANALYTICS_VERSION" />

@@ -52,25 +52,26 @@ cdvPluginPostBuildExtras.add({
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:20.2.1')
+
     def work_version = "2.8.1"
 
     // (Java only)
-    implementation "androidx.work:work-runtime"
+    implementation "androidx.work:work-runtime:$work_version"
 
     // Kotlin + coroutines
-    implementation "androidx.work:work-runtime-ktx"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // optional - RxJava2 support
-    implementation "androidx.work:work-rxjava2"
+    implementation "androidx.work:work-rxjava2:$work_version"
 
     // optional - GCMNetworkManager support
-    implementation "androidx.work:work-gcm"
+    implementation "androidx.work:work-gcm:$work_version"
 
     // optional - Test helpers
-    androidTestImplementation "androidx.work:work-testing"
+    androidTestImplementation "androidx.work:work-testing:$work_version"
 
     // optional - Multiprocess support
-    implementation "androidx.work:work-multiprocess"
+    implementation "androidx.work:work-multiprocess:$work_version"
 
     
 

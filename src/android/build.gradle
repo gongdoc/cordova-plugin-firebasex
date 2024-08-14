@@ -73,7 +73,9 @@ dependencies {
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
 
-    
+    implementation ('com.facebook.android:facebook-android-sdk:15.0.2') {
+        exclude group: "androidx.legacy", module: "legacy-support-v4"
+    }
 
     // implementation ('com.google.firebase:firebase-common:21.0.0') {
     //     exclude group: 'com.google.firebase', module: 'firebase-common'

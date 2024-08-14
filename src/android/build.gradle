@@ -1,3 +1,10 @@
+android {
+    compileSdk 34
+    defaultConfig {
+        targetSdk 34
+    }
+}
+
 buildscript {
     repositories {
         google()

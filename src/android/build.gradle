@@ -1,15 +1,15 @@
 android {
-    compileSdk 33
+    compileSdk 34
     defaultConfig {
         targetSdk 34
         minSdk 24
         multiDexEnabled true
     }
 
-    compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
-    }
+    // compileOptions {
+    //     sourceCompatibility = '1.8'
+    //     targetCompatibility = '1.8'
+    // }
 }
 
 buildscript {

@@ -47,10 +47,10 @@ var setupEnv = function(){
                 'www/google-services.json',
                 ANDROID_DIR + '/app/src/main/google-services.json'
             ],
-            colorsXml: {
-                src: './plugins/' + utilities.getPluginId() + '/src/android/colors.xml',
-                target: ANDROID_DIR + '/app/src/main/res/values/colors.xml'
-            },
+            // colorsXml: {
+            //     src: './plugins/' + utilities.getPluginId() + '/src/android/colors.xml',
+            //     target: ANDROID_DIR + '/app/src/main/res/values/colors.xml'
+            // },
             performanceGradlePlugin: {
                 classDef: 'com.google.firebase:perf-plugin',
                 pluginDef: 'com.google.firebase.firebase-perf'

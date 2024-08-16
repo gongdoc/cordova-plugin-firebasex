@@ -84,6 +84,9 @@ dependencies {
 
     // Firebase core libraries
     implementation 'com.google.firebase:firebase-common'
+    implementation 'com.google.android.gms:play-services-measurement-api'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.android.recaptcha:recaptcha'
     implementation 'com.google.firebase:firebase-firestore'
 
     implementation ('com.google.firebase:firebase-firestore:24.6.0') {

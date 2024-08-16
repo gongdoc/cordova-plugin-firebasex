@@ -118,7 +118,6 @@
 		<framework src="com.google.firebase:firebase-messaging:23.2.0" />
 		<framework src="com.google.firebase:firebase-config:22.0.0" />
 		<framework src="com.google.firebase:firebase-perf:21.0.1" />
-		<framework src="com.google.android.gms:play-services-measurement-api:22.0.2" />
 		<framework src="com.google.android.recaptcha:recaptcha:18.4.0" />
 		<framework src="com.google.android.gms:play-services-tagmanager:$ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION" />
 		<framework src="com.google.android.gms:play-services-auth:$ANDROID_PLAY_SERVICES_AUTH_VERSION" />

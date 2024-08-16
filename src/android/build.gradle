@@ -1,9 +1,11 @@
-// android {
-//     compileSdk 33
-//     defaultConfig {
-//         targetSdk 34
-//     }
-// }
+android {
+    compileSdk 34
+    defaultConfig {
+        targetSdk 34
+        minSdk 23
+        multiDexEnabled true
+    }
+}
 
 buildscript {
     repositories {
@@ -77,6 +79,8 @@ dependencies {
 
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     // Firebase core libraries
     implementation 'com.google.firebase:firebase-common'

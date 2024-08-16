@@ -56,45 +56,45 @@ cdvPluginPostBuildExtras.add({
     }
 })
 
-// dependencies {
-//     implementation platform('com.google.firebase:firebase-bom:33.1.1')
-//     def work_version = "2.8.1"
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.1.1')
+    def work_version = "2.8.1"
 
-//     // (Java only)
-//     implementation "androidx.work:work-runtime:$work_version"
+    // (Java only)
+    implementation "androidx.work:work-runtime:$work_version"
 
-//     // Kotlin + coroutines
-//     implementation "androidx.work:work-runtime-ktx:$work_version"
+    // Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
-//     // optional - RxJava2 support
-//     implementation "androidx.work:work-rxjava2:$work_version"
+    // optional - RxJava2 support
+    implementation "androidx.work:work-rxjava2:$work_version"
 
-//     // optional - GCMNetworkManager support
-//     implementation "androidx.work:work-gcm:$work_version"
+    // optional - GCMNetworkManager support
+    implementation "androidx.work:work-gcm:$work_version"
 
-//     // optional - Test helpers
-//     androidTestImplementation "androidx.work:work-testing:$work_version"
+    // optional - Test helpers
+    androidTestImplementation "androidx.work:work-testing:$work_version"
 
-//     // optional - Multiprocess support
-//     implementation "androidx.work:work-multiprocess:$work_version"
+    // optional - Multiprocess support
+    implementation "androidx.work:work-multiprocess:$work_version"
 
-//     // Firebase core libraries
-//     implementation 'com.google.firebase:firebase-common'
-//     implementation 'com.google.firebase:firebase-firestore'
+    // Firebase core libraries
+    implementation 'com.google.firebase:firebase-common'
+    implementation 'com.google.firebase:firebase-firestore'
 
-//     implementation ('com.google.firebase:firebase-firestore:24.6.0') {
-//         exclude group: 'com.google.firebase', module: 'firebase-common'
-//     }
+    implementation ('com.google.firebase:firebase-firestore:24.6.0') {
+        exclude group: 'com.google.firebase', module: 'firebase-common'
+    }
 
-//     // implementation ('com.facebook.android:facebook-android-sdk:15.0.2') {
-//     //     exclude group: "androidx.legacy", module: "legacy-support-v4"
-//     // }
+    // implementation ('com.facebook.android:facebook-android-sdk:15.0.2') {
+    //     exclude group: "androidx.legacy", module: "legacy-support-v4"
+    // }
 
-//     // implementation ('com.google.firebase:firebase-common:21.0.0') {
-//     //     exclude group: 'com.google.firebase', module: 'firebase-common'
-//     // }
-//     // implementation 'com.google.firebase:firebase-firestore:24.6.0'
-// }
+    // implementation ('com.google.firebase:firebase-common:21.0.0') {
+    //     exclude group: 'com.google.firebase', module: 'firebase-common'
+    // }
+    // implementation 'com.google.firebase:firebase-firestore:24.6.0'
+}
 
 // configurations.all {
 //     resolutionStrategy {

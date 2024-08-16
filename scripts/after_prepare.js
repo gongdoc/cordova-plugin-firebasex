@@ -80,13 +80,13 @@ module.exports = function(context){
         var androidHelper = require("./lib/android");
 
         // Apply colours
-        if(!fs.existsSync(path.resolve(PLATFORM.ANDROID.colorsXml.target))){
-            fs.copyFileSync(path.resolve(PLATFORM.ANDROID.colorsXml.src), path.resolve(PLATFORM.ANDROID.colorsXml.target));
-        }
+        // if(!fs.existsSync(path.resolve(PLATFORM.ANDROID.colorsXml.target))){
+        //     fs.copyFileSync(path.resolve(PLATFORM.ANDROID.colorsXml.src), path.resolve(PLATFORM.ANDROID.colorsXml.target));
+        // }
 
-        const $colorsXml = utilities.parseXmlFileToJson(PLATFORM.ANDROID.colorsXml.target, {compact: true});
+        //const $colorsXml = utilities.parseXmlFileToJson(PLATFORM.ANDROID.colorsXml.target, {compact: true});
         var accentColor = pluginVariables.ANDROID_ICON_ACCENT,
-            $resources = $colorsXml.resources,
+            //$resources = $colorsXml.resources,
             existingAccent = false,
             writeChanges = false;
 
@@ -123,10 +123,10 @@ module.exports = function(context){
             writeChanges = true;
         }
 
-        if(writeChanges){
-            utilities.writeJsonToXmlFile($colorsXml, PLATFORM.ANDROID.colorsXml.target);
-            utilities.log('Updated colors.xml with accent color');
-        }
+        // if(writeChanges){
+        //     utilities.writeJsonToXmlFile($colorsXml, PLATFORM.ANDROID.colorsXml.target);
+        //     utilities.log('Updated colors.xml with accent color');
+        // }
 
         if(pluginVariables['ANDROID_FIREBASE_PERFORMANCE_MONITORING'] && pluginVariables['ANDROID_FIREBASE_PERFORMANCE_MONITORING'] === 'true'){
             // Add Performance Monitoring gradle plugin for Android network traffic

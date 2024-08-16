@@ -80,6 +80,8 @@ dependencies {
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
 
+    implementation 'com.google.android.gms:play-services-auth:23.0.0' 
+
     implementation 'androidx.multidex:multidex:2.0.1'
 
     // Firebase core libraries

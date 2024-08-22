@@ -1,3 +1,12 @@
+android {
+    compileSdk 34
+    defaultConfig {
+        targetSdk 34
+        minSdk 24
+        multiDexEnabled true
+    }
+}
+
 buildscript {
     repositories {
         google()        
@@ -36,8 +45,6 @@ android {
         release {
             firebaseCrashlytics {
                 nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir "obj/local"
-                strippedNativeLibsDir "build/intermediates/jniLibs/release"
             }
         }
     }

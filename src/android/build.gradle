@@ -45,6 +45,7 @@ android {
         release {
             firebaseCrashlytics {
                 nativeSymbolUploadEnabled true
+                unstrippedNativeLibsDir "obj/local"
             }
         }
     }

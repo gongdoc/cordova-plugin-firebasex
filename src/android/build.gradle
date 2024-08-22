@@ -87,7 +87,7 @@ dependencies {
 
     implementation 'com.android.application:8.1.0'
     implementation 'com.android.library:8.1.0'
-    implementation 'com.android.library:1.9.0'
+    implementation 'org.jetbrains.kotlin.android:1.9.0'
     implementation 'com.google.devtools.ksp:1.9.0-1.0.13'
 
     implementation 'com.google.firebase:firebase-common'

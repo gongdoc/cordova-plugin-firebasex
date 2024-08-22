@@ -85,10 +85,10 @@ dependencies {
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
 
-    implementation 'com.android.application:8.1.0'
-    implementation 'com.android.library:8.1.0'
-    implementation 'org.jetbrains.kotlin.android:1.9.0'
-    implementation 'com.google.devtools.ksp:1.9.0-1.0.13'
+    implementation 'com.android.application'
+    implementation 'com.android.library'
+    implementation 'org.jetbrains.kotlin.android'
+    implementation 'com.google.devtools.ksp'
 
     implementation 'com.google.firebase:firebase-common'
     implementation 'com.google.android.gms:play-services-measurement-api:22.0.2'

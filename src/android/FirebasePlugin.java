@@ -606,7 +606,7 @@ public class FirebasePlugin extends CordovaPlugin {
                         return;
                     }
                 }
-                FirebasePlugin.instance.sendPluginResultAndKeepCallback(json, callbackContext);
+                if(json != null) FirebasePlugin.instance.sendPluginResultAndKeepCallback(json, callbackContext);
             }
         }
     }
